@@ -56,21 +56,21 @@ export function ContactSection() {
                             <ContactCard
                                 icon={Phone}
                                 title="Llámanos"
-                                content="+56 9 9876 5432"
+                                content="+56 9 •••• ••••"
                                 action="Llamar"
                                 href="tel:+56998765432"
                             />
                             <ContactCard
                                 icon={Mail}
                                 title="Escríbenos"
-                                content="diego.parra@ejemplo.cl"
+                                content="Contacto Directo"
                                 action="Enviar Correo"
                                 href="mailto:diego.parra@ejemplo.cl"
                             />
                             <ContactCard
                                 icon={MapPin}
                                 title="Visítanos"
-                                content="Concepción, Región del Bío Bío"
+                                content="Valdivia - Concepción - Curanilahue"
                                 action="Ver Mapa"
                                 href="#"
                             />
@@ -128,7 +128,7 @@ export function ContactSection() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-2" suppressHydrationWarning={true}>
                                 <label htmlFor="email" className="text-sm font-medium text-text-main">Correo Electrónico</label>
                                 <input
                                     required
