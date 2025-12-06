@@ -1,0 +1,99 @@
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  role          String    @default("USER") // USER, ADMIN
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  patient       Patient?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Patient {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Personal Info (Encrypted at rest ideally, but kept plain for MVP dev)
+  fullName        String
+  phone           String?
+  birthDate       DateTime
+  
+  // Medical Data (Sensitive)
+  condition       String?
+  medicalHistory  String? // JSON or encrypted string
+  
+  // Privacy & Consent
+  consentMedical  Boolean  @default(false)
+  consentContact  Boolean  @default(false)
+  consentDate     DateTime @default(now())
+  
+  appointments    Appointment[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  date        DateTime
+  status      String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  serviceType String   // KINESIOLOGY, ACUPUNCTURE, etc
+  notes       String?
+  
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// NextAuth Models
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
