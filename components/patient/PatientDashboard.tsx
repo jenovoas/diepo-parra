@@ -1,13 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
-import { Calendar, Plus } from "lucide-react";
+import { Calendar, Plus, Clock } from "lucide-react"; // Ensure Clock is imported
 import { buttonVariants, Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { Session } from "next-auth";
 import { AppointmentCard } from "./AppointmentCard";
 import { BookingModal } from "@/components/booking/BookingModal";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 // ... interfaces ... (same as before or imported)
 interface Appointment {

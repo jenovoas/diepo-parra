@@ -118,7 +118,7 @@ export function ContactSection() {
                                             name="name"
                                             type="text"
                                             id="name"
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                             placeholder="Juan Pérez"
                                         />
                                     </div>
@@ -129,7 +129,7 @@ export function ContactSection() {
                                             name="phone"
                                             type="tel"
                                             id="phone"
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                             placeholder="+56 9..."
                                         />
                                     </div>
@@ -142,7 +142,7 @@ export function ContactSection() {
                                         name="email"
                                         type="email"
                                         id="email"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         placeholder="juan@ejemplo.com"
                                     />
                                 </div>
@@ -153,7 +153,7 @@ export function ContactSection() {
                                         <select
                                             name="service"
                                             id="service"
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         >
                                             <option>Kinesiología</option>
                                             <option>Acupuntura</option>
@@ -168,7 +168,7 @@ export function ContactSection() {
                                             name="date"
                                             type="date"
                                             id="date"
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         />
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@ export function ContactSection() {
                                         name="message"
                                         id="message"
                                         rows={4}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-text-main dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                                         placeholder="Describe brevemente tu dolor o consulta..."
                                     />
                                 </div>
