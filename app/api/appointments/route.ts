@@ -4,6 +4,46 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+
+export async function GET(req: Request) {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user?.email) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    try {
+        let appointments;
+
+        if (session.user.role === 'ADMIN') {
+            appointments = await prisma.appointment.findMany({
+                include: { patient: true },
+                orderBy: { date: 'desc' }
+            });
+        } else {
+            // Find patient for this user
+            const patient = await prisma.patient.findUnique({
+                where: { userId: session.user.id }
+            });
+
+            if (!patient) {
+                return NextResponse.json([]); // No patient profile yet
+            }
+
+            appointments = await prisma.appointment.findMany({
+                where: { patientId: patient.id },
+                include: { patient: true },
+                orderBy: { date: 'desc' }
+            });
+        }
+
+        return NextResponse.json(appointments);
+    } catch (error) {
+        console.error("Error fetching appointments:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+}
+
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
