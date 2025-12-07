@@ -104,7 +104,7 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
     };
 
     return (
-        <div className="w-full max-w-md mx-auto bg-surface p-6 rounded-xl">
+        <div className="w-full max-w-md mx-auto bg-surface p-6 rounded-xl border border-gray-100">
             {/* Header / Back Navigation */}
             <div className="mb-6 flex items-center justify-between">
                 {step !== "doctor" && (doctors.length > 1) && (
@@ -122,27 +122,27 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
             {/* Step 1: Doctor Selection */}
             {step === "doctor" && (
                 <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-center mb-4">Selecciona un Profesional</h3>
+                    <h3 className="text-lg font-bold text-center mb-4 text-gray-900 dark:text-white">Selecciona un Profesional</h3>
                     <div className="grid gap-3">
                         {doctors.map(doc => (
                             <button
                                 key={doc.id}
                                 onClick={() => { setSelectedDoctor(doc.id); setStep("date"); }}
-                                className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-primary/50 hover:bg-primary/5 transition-all text-left group"
+                                className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all text-left group"
                             >
-                                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-xl">
+                                <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xl">
                                     {doc.image ? (
                                         // eslint-disable-next-line @next/next/no-img-element
                                         <img src={doc.image} alt={doc.name || "Doctor"} className="w-full h-full rounded-full object-cover" />
                                     ) : (
-                                        <User className="w-6 h-6 text-gray-400 group-hover:text-primary" />
+                                        <User className="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-primary" />
                                     )}
                                 </div>
                                 <div>
-                                    <p className="font-bold text-gray-800 group-hover:text-primary">{doc.name || "Profesional"}</p>
-                                    <p className="text-xs text-gray-500">Especialista</p>
+                                    <p className="font-bold text-gray-800 dark:text-white group-hover:text-primary">{doc.name || "Profesional"}</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">Especialista</p>
                                 </div>
-                                <ChevronRight className="ml-auto w-5 h-5 text-gray-300 group-hover:text-primary" />
+                                <ChevronRight className="ml-auto w-5 h-5 text-gray-300 dark:text-gray-500 group-hover:text-primary" />
                             </button>
                         ))}
                     </div>
@@ -153,16 +153,16 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
             {step === "date" && (
                 <div>
                     <div className="flex items-center justify-between mb-4">
-                        <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} disabled={isBefore(currentMonth, startOfMonth(new Date()))} className="p-2 hover:bg-gray-100 rounded-full disabled:opacity-30">
-                            <ChevronLeft className="w-5 h-5" />
+                        <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} disabled={isBefore(currentMonth, startOfMonth(new Date()))} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full disabled:opacity-30">
+                            <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                         </button>
-                        <h3 className="font-bold capitalize">{format(currentMonth, "MMMM yyyy", { locale: es })}</h3>
-                        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 rounded-full">
-                            <ChevronRight className="w-5 h-5" />
+                        <h3 className="font-bold capitalize text-gray-900 dark:text-white">{format(currentMonth, "MMMM yyyy", { locale: es })}</h3>
+                        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                            <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-7 text-center text-xs text-gray-400 mb-2">
+                    <div className="grid grid-cols-7 text-center text-xs text-gray-400 dark:text-gray-500 mb-2">
                         {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(d => <div key={d}>{d}</div>)}
                     </div>
 
@@ -181,7 +181,7 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
                                     className={cn(
                                         "h-10 w-10 mx-auto flex items-center justify-center rounded-full text-sm transition-colors relative",
                                         isSameDay(day, new Date()) && "font-bold text-primary",
-                                        disabled ? "text-gray-300 cursor-not-allowed" : "hover:bg-primary hover:text-white text-gray-700",
+                                        disabled ? "text-gray-300 dark:text-gray-600 cursor-not-allowed" : "hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300",
                                         selectedDate && isSameDay(day, selectedDate) && "bg-primary text-white"
                                     )}
                                 >
@@ -196,10 +196,10 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
             {/* Step 3: Time Selection */}
             {step === "time" && selectedDate && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                    <h3 className="font-bold text-center mb-1 capitalize">
+                    <h3 className="font-bold text-center mb-1 capitalize text-gray-900 dark:text-white">
                         {format(selectedDate, "EEEE d 'de' MMMM", { locale: es })}
                     </h3>
-                    <p className="text-center text-xs text-gray-500 mb-6">Selecciona una hora disponible</p>
+                    <p className="text-center text-xs text-gray-500 dark:text-gray-400 mb-6">Selecciona una hora disponible</p>
 
                     {loadingSlots ? (
                         <div className="flex justify-center py-12">
@@ -220,8 +220,8 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
                                         className={cn(
                                             "py-2 px-3 rounded-lg text-sm border transition-all flex items-center justify-center gap-2",
                                             isOccupied || isPastTime
-                                                ? "bg-gray-100 text-gray-400 border-transparent cursor-not-allowed decoration-slice"
-                                                : "bg-white border-primary/20 text-primary hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/20"
+                                                ? "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 border-transparent cursor-not-allowed decoration-slice"
+                                                : "bg-white dark:bg-gray-700 border-primary/20 dark:border-primary/30 text-primary dark:text-primary hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white hover:shadow-lg hover:shadow-primary/20"
                                         )}
                                     >
                                         {format(slot, "HH:mm")}
@@ -232,7 +232,7 @@ export function BookingCalendar({ doctors, serviceDuration = 60, onSelect }: Boo
                     )}
 
                     {generateTimeSlots().length === 0 && (
-                        <p className="text-center text-gray-500 py-8">No hay horas disponibles para este día.</p>
+                        <p className="text-center text-gray-500 dark:text-gray-400 py-8">No hay horas disponibles para este día.</p>
                     )}
                 </div>
             )}

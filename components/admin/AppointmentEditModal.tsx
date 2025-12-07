@@ -17,7 +17,6 @@ type Appointment = {
     patient: {
         id?: string; // Need patient ID for the link!
         fullName: string;
-        riskIndex: string;
     };
 };
 
@@ -46,13 +45,13 @@ export function AppointmentEditModal({ appointment, onClose }: AppointmentEditMo
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-gray-100 dark:border-gray-700">
                 {/* Header */}
-                <div className="bg-primary/5 p-4 flex justify-between items-center border-b border-primary/10">
+                <div className="bg-primary/5 dark:bg-primary/10 p-4 flex justify-between items-center border-b border-primary/10 dark:border-primary/20">
                     <h3 className="font-bold text-primary flex items-center gap-2">
                         Editar Cita
                     </h3>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+                    <button onClick={onClose} className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -61,8 +60,8 @@ export function AppointmentEditModal({ appointment, onClose }: AppointmentEditMo
                 <form action={handleSave} className="p-6 space-y-4">
 
                     {/* Patient Info Link */}
-                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100 mb-2">
-                        <div className="flex items-center gap-2 text-text-main font-medium">
+                    <div className="flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg border border-gray-100 dark:border-gray-600 mb-2">
+                        <div className="flex items-center gap-2 text-text-main dark:text-white font-medium">
                             <User className="w-4 h-4 text-primary" />
                             {appointment.patient.fullName}
                         </div>

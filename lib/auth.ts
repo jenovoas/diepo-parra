@@ -1,5 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import FacebookProvider from "next-auth/providers/facebook";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcryptjs";
@@ -51,6 +55,23 @@ export const authOptions: NextAuthOptions = {
                     role: user.role,
                 };
             },
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+        }),
+        GitHubProvider({
+            clientId: process.env.GITHUB_ID || "",
+            clientSecret: process.env.GITHUB_SECRET || "",
+        }),
+        AzureADProvider({
+            clientId: process.env.AZURE_AD_CLIENT_ID || "",
+            clientSecret: process.env.AZURE_AD_CLIENT_SECRET || "",
+            tenantId: process.env.AZURE_AD_TENANT_ID,
+        }),
+        FacebookProvider({
+            clientId: process.env.FACEBOOK_ID || "",
+            clientSecret: process.env.FACEBOOK_SECRET || "",
         }),
     ],
     callbacks: {

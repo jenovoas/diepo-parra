@@ -64,38 +64,38 @@ export default function CheckoutPage() {
     if (!service) return null; // Hydration safe
 
     return (
-        <div className="min-h-screen bg-secondary pt-32 pb-24">
+        <div className="min-h-screen bg-secondary dark:bg-gray-900 pt-32 pb-24">
             <div className="container mx-auto px-6 max-w-4xl">
-                <Link href={`/servicios/${service.slug}`} className="inline-flex items-center text-text-sec hover:text-primary mb-8 transition-colors">
+                <Link href={`/servicios/${service.slug}`} className="inline-flex items-center text-text-sec dark:text-gray-400 hover:text-primary dark:hover:text-primary mb-8 transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Volver al detalle
                 </Link>
 
-                <div className="bg-surface rounded-3xl shadow-xl border border-gray-100 dark:border-white/5 overflow-hidden grid md:grid-cols-2">
+                <div className="bg-surface dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden grid md:grid-cols-2">
                     {/* Order Summary */}
                     <div className="p-8 md:p-12 space-y-6">
                         <div className="space-y-2">
                             <span className="text-sm font-bold text-primary tracking-widest uppercase">Resumen de Compra</span>
-                            <h1 className="text-3xl font-bold font-accent text-text-main">{service.title}</h1>
+                            <h1 className="text-3xl font-bold font-accent text-text-main dark:text-white">{service.title}</h1>
                         </div>
 
-                        <div className="py-6 border-y border-gray-100 dark:border-white/10 space-y-4">
-                            <div className="flex justify-between items-center text-text-sec">
+                        <div className="py-6 border-y border-gray-100 dark:border-gray-700 space-y-4">
+                            <div className="flex justify-between items-center text-text-sec dark:text-gray-400">
                                 <span>Duración</span>
                                 <span className="font-semibold">{service.duration}</span>
                             </div>
-                            <div className="flex justify-between items-center text-xl font-bold text-text-main">
+                            <div className="flex justify-between items-center text-xl font-bold text-text-main dark:text-white">
                                 <span>Total a Pagar</span>
                                 <span className="text-primary">{service.price}</span>
                             </div>
                         </div>
 
                         <ul className="space-y-3">
-                            <li className="flex items-center gap-3 text-sm text-text-sec">
+                            <li className="flex items-center gap-3 text-sm text-text-sec dark:text-gray-400">
                                 <ShieldCheck className="w-5 h-5 text-teal-500" />
                                 <span>Pago seguro procesado por MercadoPago</span>
                             </li>
-                            <li className="flex items-center gap-3 text-sm text-text-sec">
+                            <li className="flex items-center gap-3 text-sm text-text-sec dark:text-gray-400">
                                 <CreditCard className="w-5 h-5 text-teal-500" />
                                 <span>Aceptamos Débito, Crédito y Prepago</span>
                             </li>
@@ -103,12 +103,12 @@ export default function CheckoutPage() {
                     </div>
 
                     {/* Payment Action */}
-                    <div className="bg-gray-50 dark:bg-white/5 p-8 md:p-12 flex flex-col justify-center items-center text-center space-y-6">
-                        <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-2">
-                            <CreditCard className="w-8 h-8 text-blue-600" />
+                    <div className="bg-gray-50 dark:bg-gray-700/30 p-8 md:p-12 flex flex-col justify-center items-center text-center space-y-6">
+                        <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-2">
+                            <CreditCard className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <h3 className="text-2xl font-bold text-text-main">Finalizar Reserva</h3>
-                        <p className="text-text-sec text-sm">
+                        <h3 className="text-2xl font-bold text-text-main dark:text-white">Finalizar Reserva</h3>
+                        <p className="text-text-sec dark:text-gray-400 text-sm">
                             Serás redirigido a MercadoPago para completar tu transacción de forma segura.
                         </p>
 

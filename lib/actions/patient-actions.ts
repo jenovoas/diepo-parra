@@ -12,6 +12,7 @@ export async function createPatient(formData: FormData) {
     const birthDate = new Date(formData.get("birthDate") as string);
     const occupation = formData.get("occupation") as string;
     const address = formData.get("address") as string;
+    const gender = formData.get("gender") as string;
 
     const condition = formData.get("condition") as string;
     const anamnesis = formData.get("anamnesis") as string;
@@ -20,7 +21,6 @@ export async function createPatient(formData: FormData) {
     const diagnosis = formData.get("diagnosis") as string;
     const treatmentPlan = formData.get("treatmentPlan") as string;
     const evolutionNotes = formData.get("evolutionNotes") as string;
-    const riskIndex = (formData.get("riskIndex") as string) || "LOW";
 
     // Check if user exists
     let user = await prisma.user.findUnique({
@@ -57,6 +57,7 @@ export async function createPatient(formData: FormData) {
             birthDate,
             occupation,
             address,
+            gender,
             condition,
             anamnesis,
             surgicalHistory,
@@ -64,7 +65,6 @@ export async function createPatient(formData: FormData) {
             diagnosis,
             treatmentPlan,
             evolutionNotes,
-            riskIndex,
         },
     });
 
@@ -78,6 +78,7 @@ export async function updatePatient(id: string, formData: FormData) {
     const birthDate = new Date(formData.get("birthDate") as string);
     const occupation = formData.get("occupation") as string;
     const address = formData.get("address") as string;
+    const gender = formData.get("gender") as string;
 
     const condition = formData.get("condition") as string;
     const anamnesis = formData.get("anamnesis") as string;
@@ -86,7 +87,6 @@ export async function updatePatient(id: string, formData: FormData) {
     const diagnosis = formData.get("diagnosis") as string;
     const treatmentPlan = formData.get("treatmentPlan") as string;
     const evolutionNotes = formData.get("evolutionNotes") as string;
-    const riskIndex = (formData.get("riskIndex") as string) || "LOW";
 
     await prisma.patient.update({
         where: { id },
@@ -96,6 +96,7 @@ export async function updatePatient(id: string, formData: FormData) {
             birthDate,
             occupation,
             address,
+            gender,
             condition,
             anamnesis,
             surgicalHistory,
@@ -103,7 +104,6 @@ export async function updatePatient(id: string, formData: FormData) {
             diagnosis,
             treatmentPlan,
             evolutionNotes,
-            riskIndex,
         },
     });
 
@@ -118,7 +118,7 @@ export async function deletePatient(id: string) {
     // For now just delete Patient profile.
     // Wait, Patient is linked to User 1:1.
     // Maybe we should delete User too?
-    // Let's delete Patient only for safety, or User?
+    // Let's delete User.
     // If we delete Patient, User becomes a "dangling" user.
     // Let's Find User ID first.
 

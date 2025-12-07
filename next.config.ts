@@ -29,11 +29,50 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Image optimization
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+  
+  // Compression and performance\n  compress: true,\n  productionBrowserSourceMaps: false,\n  \n  // Experimental features for performance
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: [
+      '@lucide-react',
+      'gsap',
+    ],
+  },
+
   async headers() {
     return [
       {
         source: '/:path*',
         headers: securityHeaders,
+      },
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
     ];
   },

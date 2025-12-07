@@ -1,24 +1,35 @@
-
 import { Link } from "@/lib/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { PatientDashboard } from "@/components/patient/PatientDashboard";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+    searchParams
+}: {
+    searchParams: { page?: string, q?: string }
+}) {
     const session = await getServerSession(authOptions);
     const locale = await getLocale();
 
-    if (!session) {
-        redirect(`/${locale}/login`);
-    }
-
     // Role-Based Access Control
-    if (['ADMIN', 'DOCTOR', 'ASSISTANT'].includes(session.user.role)) {
-        const patients = await prisma.patient.findMany({
+    if (['ADMIN', 'DOCTOR', 'ASSISTANT'].includes(session!.user.role)) {
+        const currentPage = Number(searchParams?.page) || 1;
+        const pageSize = 10;
+        const query = searchParams?.q;
+
+        const where = query ? {
+            OR: [
+                { fullName: { contains: query, mode: 'insensitive' } },
+                { user: { email: { contains: query, mode: 'insensitive' } } },
+            ],
+        } : {};
+
+
+        const patientsPromise = prisma.patient.findMany({
+            where,
             include: {
                 user: {
                     select: { email: true }
@@ -27,16 +38,16 @@ export default async function DashboardPage() {
                     select: { appointments: true }
                 }
             },
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
+            skip: (currentPage - 1) * pageSize,
+            take: pageSize,
         });
 
-        const totalPatients = await prisma.patient.count();
-        const pendingAppointments = await prisma.appointment.count({
-            where: { status: 'PENDING' }
-        });
-        const totalAppointments = await prisma.appointment.count();
+        const totalPatientsPromise = prisma.patient.count({ where });
+        const pendingAppointmentsPromise = prisma.appointment.count({ where: { status: 'PENDING' } });
+        const totalAppointmentsPromise = prisma.appointment.count();
 
-        const appointments = await prisma.appointment.findMany({
+        const appointmentsPromise = prisma.appointment.findMany({
             select: {
                 id: true,
                 date: true,
@@ -47,16 +58,24 @@ export default async function DashboardPage() {
                     select: {
                         id: true,
                         fullName: true,
-                        riskIndex: true,
+                        phone: true,
                     }
                 }
             },
             orderBy: { date: 'asc' },
         });
 
+        const [patients, totalPatients, pendingAppointments, totalAppointments, appointments] = await Promise.all([
+            patientsPromise,
+            totalPatientsPromise,
+            pendingAppointmentsPromise,
+            totalAppointmentsPromise,
+            appointmentsPromise
+        ]);
+
         return (
             <AdminDashboard
-                session={session}
+                session={session!}
                 patients={patients}
                 appointments={appointments}
                 stats={{ totalPatients, pendingAppointments, totalAppointments }}
@@ -66,7 +85,7 @@ export default async function DashboardPage() {
 
     // Regular Patient View
     const patient = await prisma.patient.findUnique({
-        where: { userId: session.user.id },
+        where: { userId: session!.user.id },
         include: {
             appointments: {
                 orderBy: { date: 'asc' },
@@ -77,7 +96,7 @@ export default async function DashboardPage() {
 
     return (
         <PatientDashboard
-            session={session}
+            session={session!}
             patient={patient}
         />
     );

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, MouseEvent } from "react";
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isWeekend, setHours, setMinutes } from "date-fns";
 import { es } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, User, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Link } from "@/lib/navigation";
 import { moveAppointment } from "@/lib/actions/appointment-actions";
@@ -19,7 +19,7 @@ type Appointment = {
     patient: {
         id: string;
         fullName: string;
-        riskIndex: string;
+        phone: string | null; // Added phone to patient type
     };
 };
 
@@ -27,9 +27,42 @@ interface AppointmentCalendarProps {
     appointments: Appointment[];
 }
 
+const AppointmentTooltip = ({ appointment, position }: { appointment: Appointment, position: { x: number, y: number } }) => {
+    if (!appointment) return null;
+
+    const statusConfig = {
+        PENDING: "bg-yellow-100 text-yellow-800",
+        CONFIRMED: "bg-green-100 text-green-800",
+        COMPLETED: "bg-blue-100 text-blue-800",
+        CANCELLED: "bg-gray-100 text-gray-800",
+    };
+
+    return (
+        <div
+            className="absolute z-10 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl w-64 text-sm"
+            style={{ left: position.x + 15, top: position.y + 15 }}
+        >
+            <p className="font-bold text-text-main dark:text-white">{appointment.patient.fullName}</p>
+            <p className="text-text-sec dark:text-gray-400">{appointment.patient.phone}</p>
+            <p className="text-text-sec dark:text-gray-400">{appointment.serviceType}</p>
+            <p className="mt-2">
+                <span className={cn("px-2 py-1 text-xs font-bold rounded-full", statusConfig[appointment.status as keyof typeof statusConfig] || statusConfig.CANCELLED)}>
+                    {appointment.status}
+                </span>
+            </p>
+        </div>
+    );
+};
+
 export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+    const [hoveredAppointment, setHoveredAppointment] = useState<Appointment | null>(null);
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = (e: MouseEvent) => {
+        setTooltipPosition({ x: e.clientX, y: e.clientY });
+    };
 
     const startDate = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 });
     const endDate = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 });
@@ -38,16 +71,6 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
         start: startDate,
         end: endDate,
     });
-
-    const getRiskColor = (risk: string) => {
-        switch (risk) {
-            case "LOW": return "bg-green-500";
-            case "MEDIUM": return "bg-yellow-500";
-            case "HIGH": return "bg-orange-500";
-            case "CRITICAL": return "bg-red-500";
-            default: return "bg-blue-500";
-        }
-    };
 
     const handleDragStart = (e: React.DragEvent, id: string) => {
         e.dataTransfer.setData("text/plain", id);
@@ -61,48 +84,57 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
         e.preventDefault();
         const id = e.dataTransfer.getData("text/plain");
 
-        // Find the appointment to get its original time
         const appointment = appointments.find(a => a.id === id);
         if (!appointment) return;
 
-        // Block weekend drops
         if (isWeekend(targetDay)) return;
 
-        // Preserve original time
         const originalDate = new Date(appointment.date);
         const newDate = setMinutes(setHours(targetDay, originalDate.getHours()), originalDate.getMinutes());
 
-        // Optimistic update or wait for revalidate
         await moveAppointment(id, newDate);
+    };
+
+    const handleWhatsAppReminder = (apt: Appointment) => {
+        if (!apt.patient.phone) {
+            alert("El paciente no tiene un número de teléfono registrado para enviar el recordatorio.");
+            return;
+        }
+
+        const formattedDate = format(new Date(apt.date), "dd/MM/yyyy", { locale: es });
+        const formattedTime = format(new Date(apt.date), "HH:mm", { locale: es });
+        const message = `¡Hola ${apt.patient.fullName}! Te recordamos tu cita de ${apt.serviceType} el ${formattedDate} a las ${formattedTime}. ¡Te esperamos!`;
+        const whatsappUrl = `https://wa.me/${apt.patient.phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
     };
 
     return (
         <>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden" onMouseMove={handleMouseMove}>
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
                     <h2 className="text-lg font-bold text-primary capitalize">
                         {format(currentMonth, "MMMM yyyy", { locale: es })}
                     </h2>
                     <div className="flex gap-2">
-                        <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 rounded-full">
-                            <ChevronLeft className="w-5 h-5 text-gray-600" />
+                        <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
-                        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 rounded-full">
-                            <ChevronRight className="w-5 h-5 text-gray-600" />
+                        <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                            <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
                     </div>
                 </div>
 
                 {/* Days Header */}
-                <div className="grid grid-cols-7 text-xs font-semibold text-center text-text-sec bg-gray-50 py-2 border-b border-gray-100">
+                <div className="grid grid-cols-7 text-xs font-semibold text-center text-text-sec dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 py-2 border-b border-gray-100 dark:border-gray-700">
                     {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => (
                         <div key={day}>{day}</div>
                     ))}
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-7 bg-gray-100 gap-[1px]">
+                <div className="grid grid-cols-7 bg-gray-100 dark:bg-gray-900 gap-[1px]">
                     {calendarDays.map((day, dayIdx) => {
                         const dayAppointments = appointments.filter(apt => isSameDay(new Date(apt.date), day));
                         const isDayWeekend = isWeekend(day);
@@ -114,20 +146,20 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                                 onDrop={!isDayWeekend ? (e) => handleDrop(e, day) : undefined}
                                 className={cn(
                                     "min-h-[100px] p-2 flex flex-col gap-1 transition-colors relative",
-                                    isDayWeekend ? "bg-gray-100/60" : "bg-white",
-                                    !isSameMonth(day, currentMonth) && !isDayWeekend && "bg-gray-50/50 text-gray-400"
+                                    isDayWeekend ? "bg-gray-100 dark:bg-gray-700/30" : "bg-white dark:bg-gray-800",
+                                    !isSameMonth(day, currentMonth) && !isDayWeekend && "bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500"
                                 )}
                             >
                                 <div className="flex justify-between items-start">
                                     <span className={cn(
                                         "text-sm font-medium w-6 h-6 flex items-center justify-center rounded-full mb-1",
-                                        isSameDay(day, new Date()) ? "bg-primary text-white" : "text-gray-700",
-                                        isDayWeekend && "text-gray-400"
+                                        isSameDay(day, new Date()) ? "bg-primary text-white" : "text-gray-700 dark:text-gray-300",
+                                        isDayWeekend && "text-gray-400 dark:text-gray-500"
                                     )}>
                                         {format(day, "d")}
                                     </span>
                                     {isDayWeekend && (
-                                        <span className="text-[10px] uppercase font-bold text-gray-300 pointer-events-none select-none">
+                                        <span className="text-[10px] uppercase font-bold text-gray-300 dark:text-gray-500 pointer-events-none select-none">
                                             Cerrado
                                         </span>
                                     )}
@@ -138,36 +170,45 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                                         key={apt.id}
                                         draggable
                                         onDragStart={(e) => handleDragStart(e, apt.id)}
-                                        className="group relative flex items-center gap-1 rounded bg-gray-50 border border-gray-100 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-grab active:cursor-grabbing px-2 py-1"
+                                        onMouseEnter={() => setHoveredAppointment(apt)}
+                                        onMouseLeave={() => setHoveredAppointment(null)}
+                                        className="group relative flex items-center gap-1 rounded bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 hover:border-primary/30 dark:hover:border-primary/30 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing px-2 py-1"
                                     >
-                                        {/* Left: Status & Time -> Opens Modal */}
                                         <button
                                             onClick={() => setSelectedAppointment(apt)}
-                                            className="flex items-center gap-1 text-[10px] font-mono text-gray-500 hover:text-primary transition-colors"
+                                            className="flex items-center gap-1 text-[10px] font-mono text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
                                             title="Editar Hora/Estado"
                                         >
-                                            <div className={cn("w-2 h-2 rounded-full flex-shrink-0", getRiskColor(apt.patient.riskIndex))} />
                                             {format(new Date(apt.date), "HH:mm")}
                                         </button>
 
-                                        {/* Divider */}
-                                        <span className="text-gray-300 text-[10px] select-none">|</span>
+                                        <span className="text-gray-300 dark:text-gray-600 text-[10px] select-none">|</span>
 
-                                        {/* Right: Name -> Opens Patient File */}
                                         <Link
                                             href={`/dashboard/patients/${apt.patient.id}/edit`}
-                                            className="flex-1 text-[10px] truncate hover:text-primary hover:underline font-medium text-text-main"
+                                            className="flex-1 text-[10px] truncate hover:text-primary dark:hover:text-primary hover:underline font-medium text-text-main dark:text-white"
                                             title={`Ver Ficha de ${apt.patient.fullName}`}
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             {apt.patient.fullName.split(" ")[0]} {apt.patient.fullName.split(" ")[1] || ""}
                                         </Link>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleWhatsAppReminder(apt);
+                                            }}
+                                            className="p-1 rounded-full hover:bg-green-500/20 text-green-500 transition-colors"
+                                            title="Enviar recordatorio por WhatsApp"
+                                        >
+                                            <MessageCircle className="w-3 h-3" />
+                                        </button>
                                     </div>
                                 ))}
                             </div>
                         );
                     })}
                 </div>
+                {hoveredAppointment && <AppointmentTooltip appointment={hoveredAppointment} position={tooltipPosition} />}
             </div>
 
             {selectedAppointment && (

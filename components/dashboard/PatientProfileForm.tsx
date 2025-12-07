@@ -10,7 +10,7 @@ type PatientData = {
     phone: string | null;
     birthDate: string;
     condition: string | null;
-    medicalHistory: string | null;
+    anamnesis: string | null;
 };
 
 interface Props {
@@ -29,7 +29,7 @@ export function PatientProfileForm({ initialData, userName, userEmail }: Props) 
         phone: initialData?.phone || '',
         birthDate: initialData?.birthDate || '',
         condition: initialData?.condition || '',
-        medicalHistory: initialData?.medicalHistory || '',
+        anamnesis: initialData?.anamnesis || '',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -68,91 +68,91 @@ export function PatientProfileForm({ initialData, userName, userEmail }: Props) 
             {/* Read Only Info */}
             <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email (Cuenta)</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email (Cuenta)</label>
                     <input
                         type="email"
                         value={userEmail}
                         disabled
-                        className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed"
+                        className="w-full p-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 cursor-not-allowed"
                     />
                 </div>
             </div>
 
-            <div className="border-t border-gray-100 my-6"></div>
+            <div className="border-t border-gray-100 dark:border-gray-700 my-6"></div>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 Información Personal
             </h3>
 
             <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre Completo</label>
                     <input
                         type="text"
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Teléfono</label>
                     <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+569..."
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha de Nacimiento</label>
                     <input
                         type="date"
                         name="birthDate"
                         value={formData.birthDate}
                         onChange={handleChange}
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     />
                 </div>
             </div>
 
-            <div className="border-t border-gray-100 my-6"></div>
+            <div className="border-t border-gray-100 dark:border-gray-700 my-6"></div>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Antecedentes Médicos
             </h3>
 
             <div className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Condición / Motivo de Consulta Principal</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Condición / Motivo de Consulta Principal</label>
                     <input
                         type="text"
                         name="condition"
                         value={formData.condition}
                         onChange={handleChange}
                         placeholder="Ej: Dolor lumbar, Esguince de tobillo..."
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Historial Médico Relevante</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Historial Médico Relevante</label>
                     <textarea
-                        name="medicalHistory"
-                        value={formData.medicalHistory}
+                        name="anamnesis"
+                        value={formData.anamnesis}
                         onChange={handleChange}
                         rows={4}
                         placeholder="Operaciones previas, alergias, enfermedades crónicas..."
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                     />
                 </div>
             </div>
 
             {msg && (
-                <div className={`p-4 rounded-lg flex items-center gap-2 ${msg.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <div className={`p-4 rounded-lg flex items-center gap-2 ${msg.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400'}`}>
                     {msg.type === 'success' ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
                     {msg.text}
                 </div>

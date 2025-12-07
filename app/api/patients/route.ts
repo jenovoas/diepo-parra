@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { fullName, phone, birthDate, condition, medicalHistory, consentMedical, consentContact } = body;
+        const { fullName, phone, birthDate, condition, anamnesis, consentMedical, consentContact } = body;
 
         // Validate required fields (basic validation)
         if (!fullName || !birthDate || !consentMedical) {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
                 phone,
                 birthDate: new Date(birthDate),
                 condition,
-                medicalHistory,
+                anamnesis,
                 // Only update consents if provided, otherwise keep existing
                 ...(consentMedical !== undefined && { consentMedical }),
                 ...(consentContact !== undefined && { consentContact })
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
                 phone,
                 birthDate: new Date(birthDate),
                 condition,
-                medicalHistory,
+                anamnesis,
                 consentMedical: consentMedical || false,
                 consentContact: consentContact || false,
             },

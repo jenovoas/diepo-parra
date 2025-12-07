@@ -15,7 +15,7 @@ model User {
   emailVerified DateTime?
   image         String?
   passwordHash  String?
-  role          String    @default("USER") // USER, ADMIN
+  role          String    @default("USER") // USER, ADMIN, DOCTOR, ASSISTANT
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -36,6 +36,7 @@ model Patient {
   birthDate       DateTime
   occupation      String?
   address         String?
+  gender          String?
   
   // Medical Data (Sensitive)
   condition            String?
@@ -45,7 +46,6 @@ model Patient {
   diagnosis            String?
   treatmentPlan        String?
   evolutionNotes       String? // Could be JSON or separate model later
-  riskIndex            String   @default("LOW") // LOW, MEDIUM, HIGH, CRITICAL
   
   // Privacy & Consent
   consentMedical  Boolean  @default(false)

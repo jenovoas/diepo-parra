@@ -3,24 +3,33 @@ import { Calendar, CheckCircle, Clock, Search, XCircle, Filter } from "lucide-re
 import { Button } from "@/components/ui/Button";
 
 export default async function AdminDashboardPage() {
-    // 1. Fetch appointments
+    // 1. Fetch appointments with selected patient fields
     const appointments = await prisma.appointment.findMany({
-        include: {
-            patient: true
+        select: {
+            id: true,
+            date: true,
+            serviceType: true,
+            status: true,
+            notes: true,
+            patient: {
+                select: {
+                    fullName: true,
+                    phone: true,
+                }
+            }
         },
         orderBy: {
             date: 'desc'
         }
     });
 
-    // 2. Calculate Stats
-    const total = appointments.length;
-    const pending = appointments.filter(a => a.status === 'PENDING').length;
-    const confirmed = appointments.filter(a => a.status === 'CONFIRMED').length;
+    // 2. Calculate Stats using prisma.count
+    const total = await prisma.appointment.count();
+    const pending = await prisma.appointment.count({ where: { status: 'PENDING' } });
+    const confirmed = await prisma.appointment.count({ where: { status: 'CONFIRMED' } });
 
     return (
         <div className="container mx-auto px-6 py-12">
-
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>

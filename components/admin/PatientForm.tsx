@@ -6,6 +6,19 @@ import { cn } from "@/lib/utils/cn";
 import { User, FileText, Activity, Save } from "lucide-react";
 import { createPatient, updatePatient } from "@/lib/actions/patient-actions";
 
+// Helper to calculate age
+const calculateAge = (birthDate: Date) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    return age;
+};
+
+
 type Patient = {
     id?: string;
     fullName?: string;
@@ -13,14 +26,15 @@ type Patient = {
     birthDate?: Date;
     occupation?: string | null;
     address?: string | null;
-    user?: { email: string | null };
+    user?: { email: string | null; image?: string | null; };
     condition?: string | null;
     anamnesis?: string | null;
     surgicalHistory?: string | null;
     pathologicalHistory?: string | null;
     diagnosis?: string | null;
     treatmentPlan?: string | null;
-    riskIndex?: string;
+    evolutionNotes?: string | null;
+    gender?: string | null;
     appointments?: {
         id: string;
         date: Date;
@@ -35,17 +49,48 @@ interface PatientFormProps {
     readOnly?: boolean;
 }
 
+const ReadOnlyField = ({ label, value }: { label: string, value: React.ReactNode }) => (
+    <div>
+        <h3 className="block text-sm font-medium text-text-main dark:text-white mb-1">{label}</h3>
+        <p className="text-text-sec dark:text-gray-300">{value || "No especificado"}</p>
+    </div>
+);
+
+
+const PatientHeader = ({ patient, readOnly }: { patient: Patient, readOnly: boolean }) => {
+    if (!patient) return null;
+    
+    const age = patient.birthDate ? calculateAge(patient.birthDate) : null;
+
+
+    return (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8 flex items-center gap-6">
+            <div className="relative w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0">
+                {patient.user?.image && <img src={patient.user.image} alt="Patient Avatar" className="rounded-full w-full h-full object-cover" />}
+            </div>
+            <div className="flex-grow">
+                <h1 className="text-2xl font-bold text-text-main dark:text-white">{patient.fullName}</h1>
+                <p className="text-text-sec dark:text-gray-400">{patient.user?.email}</p>
+                <div className="flex items-center gap-4 mt-2 text-sm">
+                    {age && (
+                        <span className="text-text-sec dark:text-gray-300">
+                            <strong>Edad:</strong> {age} años
+                        </span>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
     const [activeTab, setActiveTab] = useState("personal");
 
     const tabs = [
         { id: "personal", label: "Datos Personales", icon: User },
-        { id: "history", label: "Antecedentes", icon: FileText },
-        { id: "clinical", label: "Ficha Clínica", icon: Activity },
+        { id: "clinical", label: "Historia Clínica", icon: FileText },
     ];
 
-    // Only show "Historial de Atención" if we are in readOnly mode (assuming this implies Detail View for Admin/Doc)
-    // Or if patient exists. Actually, "Attention History" is fine to be there if patient exists.
     if (patient?.appointments) {
         tabs.push({ id: "appointments", label: "Historial de Atención", icon: Activity });
     }
@@ -59,18 +104,11 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
         }
     };
 
-    const riskLevel = patient?.riskIndex || "LOW";
-    const riskColor = {
-        LOW: "bg-green-100 text-green-800 border-green-200",
-        MEDIUM: "bg-yellow-100 text-yellow-800 border-yellow-200",
-        HIGH: "bg-orange-100 text-orange-800 border-orange-200",
-        CRITICAL: "bg-red-100 text-red-800 border-red-200",
-    }[riskLevel] || "bg-gray-100 text-gray-800";
-
     return (
         <form action={handleSubmit} className="space-y-8">
-            {/* Tabs */}
-            <div className="flex border-b border-gray-200 overflow-x-auto">
+            {patient && <PatientHeader patient={patient} readOnly={readOnly}/>}
+
+            <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
@@ -82,7 +120,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                                 "flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors border-b-2 -mb-[1px] whitespace-nowrap",
                                 activeTab === tab.id
                                     ? "border-primary text-primary"
-                                    : "border-transparent text-text-sec hover:text-text-main hover:border-gray-300"
+                                    : "border-transparent text-text-sec dark:text-gray-400 hover:text-text-main dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
                             )}
                         >
                             <Icon className="w-4 h-4" />
@@ -92,194 +130,193 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                 })}
             </div>
 
-            {/* Content */}
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 min-h-[400px]">
-
-                {/* Personal Data */}
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-[400px]">
                 <div className={cn("space-y-6", activeTab !== "personal" && "hidden")}>
-                    {/* Risk Index Selector (Top Right) */}
-                    <div className="flex justify-end mb-4">
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm font-bold text-text-main">Índice de Riesgo:</label>
-                            <select
-                                name="riskIndex"
-                                defaultValue={riskLevel}
-                                disabled={readOnly}
-                                className={cn(
-                                    "px-3 py-1 rounded-full text-xs font-bold border outline-none cursor-pointer",
-                                    riskColor
-                                )}
-                            >
-                                <option value="LOW">Bajo (Verde)</option>
-                                <option value="MEDIUM">Medio (Amarillo)</option>
-                                <option value="HIGH">Alto (Naranja)</option>
-                                <option value="CRITICAL">Crítico (Rojo)</option>
-                            </select>
+                <div className="grid md:grid-cols-2 gap-6">
+                        {readOnly ? (
+                            <>
+                                <ReadOnlyField label="Nombre Completo" value={patient?.fullName} />
+                                <ReadOnlyField label="Email (Usuario)" value={patient?.user?.email} />
+                                <ReadOnlyField label="Teléfono" value={patient?.phone} />
+                                <ReadOnlyField label="Fecha de Nacimiento" value={patient?.birthDate ? new Date(patient.birthDate).toLocaleDateString() : ""} />
+                                <ReadOnlyField label="Ocupación" value={patient?.occupation} />
+                                <ReadOnlyField label="Dirección" value={patient?.address} />
+                                <ReadOnlyField label="Género" value={patient?.gender} />
+                            </>
+                        ) : (
+                            <>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Nombre Completo</label>
+                                    <input
+                                        name="fullName"
+                                        defaultValue={patient?.fullName}
+                                        required
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Email (Usuario)</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        defaultValue={patient?.user?.email || ""}
+                                        required={!patient}
+                                        disabled={!!patient}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500 dark:disabled:text-gray-400"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Teléfono</label>
+                                    <input
+                                        name="phone"
+                                        defaultValue={patient?.phone || ""}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Fecha de Nacimiento</label>
+                                    <input
+                                        type="date"
+                                        name="birthDate"
+                                        defaultValue={patient?.birthDate ? new Date(patient.birthDate).toISOString().split('T')[0] : ""}
+                                        required
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Ocupación</label>
+                                    <input
+                                        name="occupation"
+                                        defaultValue={patient?.occupation || ""}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    />
+                               _</div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Dirección</label>
+                                    <input
+                                        name="address"
+                                        defaultValue={patient?.address || ""}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Género</label>
+                                    <select
+                                        name="gender"
+                                        defaultValue={patient?.gender || ""}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                    >
+                                        <option value="">Seleccione...</option>
+                                        <option value="female">Femenino</option>
+                                        <option value="male">Masculino</option>
+                                        <option value="other">Otro</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
                         </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Nombre Completo</label>
-                            <input
-                                name="fullName"
-                                defaultValue={patient?.fullName}
-                                required
-                                disabled={readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Email (Usuario)</label>
-                            <input
-                                type="email"
-                                name="email"
-                                defaultValue={patient?.user?.email || ""}
-                                required={!patient}
-                                disabled={!!patient || readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-100 disabled:text-gray-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Teléfono</label>
-                            <input
-                                name="phone"
-                                defaultValue={patient?.phone || ""}
-                                disabled={readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Fecha de Nacimiento</label>
-                            <input
-                                type="date"
-                                name="birthDate"
-                                defaultValue={patient?.birthDate ? new Date(patient.birthDate).toISOString().split('T')[0] : ""}
-                                required
-                                disabled={readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Ocupación</label>
-                            <input
-                                name="occupation"
-                                defaultValue={patient?.occupation || ""}
-                                disabled={readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main mb-1">Dirección</label>
-                            <input
-                                name="address"
-                                defaultValue={patient?.address || ""}
-                                disabled={readOnly}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                            />
-                        </div>
-                    </div>
                 </div>
 
-                {/* Medical History */}
-                <div className={cn("space-y-6", activeTab !== "history" && "hidden")}>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Anamnesis (Motivo de consulta)</label>
-                        <textarea
-                            name="anamnesis"
-                            defaultValue={patient?.anamnesis || ""}
-                            rows={4}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Antecedentes Quirúrgicos</label>
-                        <textarea
-                            name="surgicalHistory"
-                            defaultValue={patient?.surgicalHistory || ""}
-                            rows={3}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Antecedentes Patológicos</label>
-                        <textarea
-                            name="pathologicalHistory"
-                            defaultValue={patient?.pathologicalHistory || ""}
-                            rows={3}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                </div>
-
-                {/* Clinical Data */}
                 <div className={cn("space-y-6", activeTab !== "clinical" && "hidden")}>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Diagnóstico</label>
-                        <input
-                            name="diagnosis"
-                            defaultValue={patient?.diagnosis || ""}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Plan de Tratamiento</label>
-                        <textarea
-                            name="treatmentPlan"
-                            defaultValue={patient?.treatmentPlan || ""}
-                            rows={4}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Condición Actual</label>
-                        <textarea
-                            name="condition"
-                            defaultValue={patient?.condition || ""}
-                            rows={3}
-                            disabled={readOnly}
-                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-text-main mb-1">Notas de Evolución</label>
-                        <textarea
-                            name="evolutionNotes"
-                            defaultValue={patient?.evolutionNotes || ""}
-                            rows={6}
-                            disabled={readOnly}
-                            className={cn(
-                                "w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-primary outline-none disabled:bg-gray-50 disabled:text-text-sec",
-                                !readOnly && "bg-yellow-50/50"
-                            )}
-                        />
-                    </div>
+                {readOnly ? (
+                    <>
+                        <ReadOnlyField label="Anamnesis (Motivo de consulta)" value={patient?.anamnesis} />
+                        <ReadOnlyField label="Antecedentes Quirúrgicos" value={patient?.surgicalHistory} />
+                        <ReadOnlyField label="Antecedentes Patológicos" value={patient?.pathologicalHistory} />
+                        <ReadOnlyField label="Diagnóstico" value={patient?.diagnosis} />
+                        <ReadOnlyField label="Plan de Tratamiento" value={patient?.treatmentPlan} />
+                        <ReadOnlyField label="Condición Actual" value={patient?.condition} />
+                        <ReadOnlyField label="Notas de Evolución" value={patient?.evolutionNotes} />
+                    </>
+                ) : (
+                    <>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Anamnesis (Motivo de consulta)</label>
+                            <textarea
+                                name="anamnesis"
+                                defaultValue={patient?.anamnesis || ""}
+                                rows={4}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Quirúrgicos</label>
+                            <textarea
+                                name="surgicalHistory"
+                                defaultValue={patient?.surgicalHistory || ""}
+                                rows={3}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Patológicos</label>
+                            <textarea
+                                name="pathologicalHistory"
+                                defaultValue={patient?.pathologicalHistory || ""}
+                                rows={3}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Diagnóstico</label>
+                            <input
+                                name="diagnosis"
+                                defaultValue={patient?.diagnosis || ""}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Plan de Tratamiento</label>
+                            <textarea
+                                name="treatmentPlan"
+                                defaultValue={patient?.treatmentPlan || ""}
+                                rows={4}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Condición Actual</label>
+                            <textarea
+                                name="condition"
+                                defaultValue={patient?.condition || ""}
+                                rows={3}
+                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gamma-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Notas de Evolución</label>
+                            <textarea
+                                name="evolutionNotes"
+                                defaultValue={patient?.evolutionNotes || ""}
+                                rows={6}
+                                className={cn(
+                                    "w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none",
+                                    !readOnly && "dark:bg-yellow-900/20"
+                                )}
+                            />
+                        </div>
+                    </>
+                )}
                 </div>
 
-                {/* Appointments History (New Tab) */}
                 <div className={cn("space-y-6", activeTab !== "appointments" && "hidden")}>
                     <h3 className="text-lg font-bold text-primary mb-4">Historial de Citas</h3>
                     {patient?.appointments && patient.appointments.length > 0 ? (
                         <div className="space-y-3">
                             {patient.appointments.map((apt) => (
-                                <div key={apt.id} className="bg-gray-50 p-4 rounded-lg flex justify-between items-center border border-gray-100">
+                                <div key={apt.id} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg flex justify-between items-center border border-gray-100 dark:border-gray-600">
                                     <div>
                                         <p className="font-bold text-primary">{apt.serviceType}</p>
-                                        <p className="text-sm text-text-sec">
+                                        <p className="text-sm text-text-sec dark:text-gray-400">
                                             {new Date(apt.date).toLocaleDateString()} - {new Date(apt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
-                                        {apt.notes && <p className="text-sm italic text-gray-500 mt-1">"{apt.notes}"</p>}
+                                        {apt.notes && <p className="text-sm italic text-gray-500 dark:text-gray-400 mt-1">"{apt.notes}"</p>}
                                     </div>
                                     <span className={cn(
                                         "px-3 py-1 rounded-full text-xs font-bold",
-                                        apt.status === 'CONFIRMED' ? "bg-green-100 text-green-700" :
-                                            apt.status === 'PENDING' ? "bg-yellow-100 text-yellow-700" :
-                                                apt.status === 'COMPLETED' ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700"
+                                        apt.status === 'CONFIRMED' ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" :
+                                            apt.status === 'PENDING' ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400" :
+                                                apt.status === 'COMPLETED' ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400" : "bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
                                     )}>
                                         {apt.status}
                                     </span>
@@ -287,7 +324,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-text-sec italic">No hay citas registradas para este paciente.</p>
+                        <p className="text-text-sec dark:text-gray-400 italic">No hay citas registradas para este paciente.</p>
                     )}
                 </div>
             </div>

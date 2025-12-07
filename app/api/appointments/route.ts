@@ -41,7 +41,8 @@ export async function POST(req: Request) {
 
         // Verify patient belongs to user
         const patientStr = await prisma.patient.findUnique({
-            where: { id: patientId }
+            where: { id: patientId },
+            select: { userId: true }
         });
 
         if (!patientStr || patientStr.userId !== session.user.id) {

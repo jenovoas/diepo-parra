@@ -1,3 +1,4 @@
+"use client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -29,7 +30,7 @@ export async function PATCH(
             // Verify ownership
             const appointment = await prisma.appointment.findUnique({
                 where: { id },
-                include: { patient: true }
+                select: { patient: { select: { userId: true } } }
             });
 
             if (!appointment || appointment.patient.userId !== session.user.id) {
@@ -65,7 +66,7 @@ export async function DELETE(
         // Verify appointment exists
         const appointment = await prisma.appointment.findUnique({
             where: { id },
-            include: { patient: true }
+            select: { patient: { select: { userId: true } } }
         });
 
         if (!appointment) {

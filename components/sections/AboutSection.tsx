@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { GraduationCap, Award, MapPin, BadgeCheck } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ClientOnly } from "@/components/ui/ClientOnly";
 
 import { useTranslations } from 'next-intl';
 
@@ -76,15 +77,17 @@ export function AboutSection() {
                         </div>
 
                         {/* Floating Badge */}
-                        <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-2xl shadow-lg flex items-center gap-3 animate-float">
-                            <div className="p-2 bg-primary/10 rounded-full text-primary">
-                                <BadgeCheck className="w-6 h-6" />
+                        <ClientOnly>
+                            <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-2xl shadow-lg flex items-center gap-3 animate-float border border-gray-100">
+                                <div className="p-2 bg-primary/10 rounded-full text-primary">
+                                    <BadgeCheck className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-text-sec uppercase tracking-wider">Experiencia</p>
+                                    <p className="font-bold text-text-main">5+ Años</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-xs text-text-sec uppercase tracking-wider">Experiencia</p>
-                                <p className="font-bold text-text-main">5+ Años</p>
-                            </div>
-                        </div>
+                        </ClientOnly>
                     </div>
                 </div>
 

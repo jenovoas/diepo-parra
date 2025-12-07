@@ -8,21 +8,22 @@ async function main() {
 
     // 1. Create Roles & Specific Users
     const roles = [
-        { email: 'admin@diepoparra.cl', name: 'Admin Diego Parra', role: 'ADMIN' },
-        { email: 'medico@diepoparra.cl', name: 'Dr. Roberto Médico', role: 'DOCTOR' },
-        { email: 'asistente@diepoparra.cl', name: 'Asistente Clínica', role: 'ASSISTANT' },
-        { email: 'paciente@test.com', name: 'Paciente Test', role: 'USER' },
+        { email: 'admin@diepoparra.cl', name: 'Admin Diego Parra', role: 'ADMIN', image: 'https://i.pravatar.cc/150?u=admin@diepoparra.cl' },
+        { email: 'medico@diepoparra.cl', name: 'Dr. Roberto Médico', role: 'DOCTOR', image: 'https://i.pravatar.cc/150?u=medico@diepoparra.cl' },
+        { email: 'asistente@diepoparra.cl', name: 'Asistente Clínica', role: 'ASSISTANT', image: 'https://i.pravatar.cc/150?u=asistente@diepoparra.cl' },
+        { email: 'paciente@test.com', name: 'Paciente Test', role: 'USER', image: 'https://i.pravatar.cc/150?u=paciente@test.com' },
     ];
 
     for (const user of roles) {
         await prisma.user.upsert({
             where: { email: user.email },
-            update: { role: user.role },
+            update: { role: user.role, image: user.image },
             create: {
                 email: user.email,
                 name: user.name,
                 passwordHash,
                 role: user.role,
+                image: user.image,
             },
         });
     }
@@ -66,6 +67,7 @@ async function main() {
                 name: fullName,
                 passwordHash,
                 role: 'USER',
+                image: `https://i.pravatar.cc/150?u=${email}`
             },
         });
 
