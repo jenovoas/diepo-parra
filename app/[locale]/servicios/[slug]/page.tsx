@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { services } from "@/lib/data/services";
 import { Button } from "@/components/ui/Button";
 import { PaymentButton } from "@/components/ui/PaymentButton";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { ArrowLeft, Clock, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { getTranslations } from 'next-intl/server';
