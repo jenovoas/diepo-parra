@@ -1,17 +1,23 @@
 export default {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm', // Use default-esm preset for better ESM support
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/__tests__/setupTests.ts'],
+  transform: {
+    // Explicitly define transformations for ts, tsx, js, and jsx files
+    '^.+\\.(ts|tsx|js|jsx)$': ['ts-jest', {
+      useESM: true,
+      tsconfig: 'tsconfig.json', // Specify tsconfig if needed
+    }],
+  },
   transformIgnorePatterns: [
-    '/node_modules/(?!(next-auth|@next-auth|jose)/)'
+    // Transform all node_modules except specific ESM packages
+    'node_modules/(?!jose|next-auth|@next-auth)/',
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
+  testPathIgnorePatterns: [
+    '<rootDir>/__tests__/setupTests.ts', // Ignore setupTests.ts as a test file
+  ],
 };
