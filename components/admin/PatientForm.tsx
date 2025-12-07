@@ -3,8 +3,11 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
-import { User, FileText, Activity, Save } from "lucide-react";
+import { User, FileText, Activity, Save, Pill, TrendingUp } from "lucide-react";
 import { createPatient, updatePatient } from "@/lib/actions/patient-actions";
+import { MedicationSection } from "./MedicationSection";
+import { TreatmentSection } from "./TreatmentSection";
+import { HealthMetricsSection } from "./HealthMetricsSection";
 
 // Helper to calculate age
 const calculateAge = (birthDate: Date) => {
@@ -59,7 +62,7 @@ const ReadOnlyField = ({ label, value }: { label: string, value: React.ReactNode
 
 const PatientHeader = ({ patient, readOnly }: { patient: Patient, readOnly: boolean }) => {
     if (!patient) return null;
-    
+
     const age = patient.birthDate ? calculateAge(patient.birthDate) : null;
 
 
@@ -91,6 +94,15 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
         { id: "clinical", label: "Historia Clínica", icon: FileText },
     ];
 
+    // Add new tabs for medications, treatments, and metrics
+    if (patient) {
+        tabs.push(
+            { id: "medications", label: "Medicamentos", icon: Pill },
+            { id: "treatments", label: "Tratamientos", icon: Activity },
+            { id: "metrics", label: "Métricas de Salud", icon: TrendingUp }
+        );
+    }
+
     if (patient?.appointments) {
         tabs.push({ id: "appointments", label: "Historial de Atención", icon: Activity });
     }
@@ -106,7 +118,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
 
     return (
         <form action={handleSubmit} className="space-y-8">
-            {patient && <PatientHeader patient={patient} readOnly={readOnly}/>}
+            {patient && <PatientHeader patient={patient} readOnly={readOnly} />}
 
             <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                 {tabs.map((tab) => {
@@ -132,7 +144,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
 
             <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-[400px]">
                 <div className={cn("space-y-6", activeTab !== "personal" && "hidden")}>
-                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-6">
                         {readOnly ? (
                             <>
                                 <ReadOnlyField label="Nombre Completo" value={patient?.fullName} />
@@ -190,7 +202,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                                         defaultValue={patient?.occupation || ""}
                                         className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
                                     />
-                               _</div>
+                                    _</div>
                                 <div>
                                     <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Dirección</label>
                                     <input
@@ -214,89 +226,113 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                                 </div>
                             </>
                         )}
-                        </div>
+                    </div>
                 </div>
 
                 <div className={cn("space-y-6", activeTab !== "clinical" && "hidden")}>
-                {readOnly ? (
-                    <>
-                        <ReadOnlyField label="Anamnesis (Motivo de consulta)" value={patient?.anamnesis} />
-                        <ReadOnlyField label="Antecedentes Quirúrgicos" value={patient?.surgicalHistory} />
-                        <ReadOnlyField label="Antecedentes Patológicos" value={patient?.pathologicalHistory} />
-                        <ReadOnlyField label="Diagnóstico" value={patient?.diagnosis} />
-                        <ReadOnlyField label="Plan de Tratamiento" value={patient?.treatmentPlan} />
-                        <ReadOnlyField label="Condición Actual" value={patient?.condition} />
-                        <ReadOnlyField label="Notas de Evolución" value={patient?.evolutionNotes} />
-                    </>
-                ) : (
-                    <>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Anamnesis (Motivo de consulta)</label>
-                            <textarea
-                                name="anamnesis"
-                                defaultValue={patient?.anamnesis || ""}
-                                rows={4}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Quirúrgicos</label>
-                            <textarea
-                                name="surgicalHistory"
-                                defaultValue={patient?.surgicalHistory || ""}
-                                rows={3}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Patológicos</label>
-                            <textarea
-                                name="pathologicalHistory"
-                                defaultValue={patient?.pathologicalHistory || ""}
-                                rows={3}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Diagnóstico</label>
-                            <input
-                                name="diagnosis"
-                                defaultValue={patient?.diagnosis || ""}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Plan de Tratamiento</label>
-                            <textarea
-                                name="treatmentPlan"
-                                defaultValue={patient?.treatmentPlan || ""}
-                                rows={4}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Condición Actual</label>
-                            <textarea
-                                name="condition"
-                                defaultValue={patient?.condition || ""}
-                                rows={3}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gamma-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Notas de Evolución</label>
-                            <textarea
-                                name="evolutionNotes"
-                                defaultValue={patient?.evolutionNotes || ""}
-                                rows={6}
-                                className={cn(
-                                    "w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none",
-                                    !readOnly && "dark:bg-yellow-900/20"
-                                )}
-                            />
-                        </div>
-                    </>
-                )}
+                    {readOnly ? (
+                        <>
+                            <ReadOnlyField label="Anamnesis (Motivo de consulta)" value={patient?.anamnesis} />
+                            <ReadOnlyField label="Antecedentes Quirúrgicos" value={patient?.surgicalHistory} />
+                            <ReadOnlyField label="Antecedentes Patológicos" value={patient?.pathologicalHistory} />
+                            <ReadOnlyField label="Diagnóstico" value={patient?.diagnosis} />
+                            <ReadOnlyField label="Plan de Tratamiento" value={patient?.treatmentPlan} />
+                            <ReadOnlyField label="Condición Actual" value={patient?.condition} />
+                            <ReadOnlyField label="Notas de Evolución" value={patient?.evolutionNotes} />
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Anamnesis (Motivo de consulta)</label>
+                                <textarea
+                                    name="anamnesis"
+                                    defaultValue={patient?.anamnesis || ""}
+                                    rows={4}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Quirúrgicos</label>
+                                <textarea
+                                    name="surgicalHistory"
+                                    defaultValue={patient?.surgicalHistory || ""}
+                                    rows={3}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Antecedentes Patológicos</label>
+                                <textarea
+                                    name="pathologicalHistory"
+                                    defaultValue={patient?.pathologicalHistory || ""}
+                                    rows={3}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Diagnóstico</label>
+                                <input
+                                    name="diagnosis"
+                                    defaultValue={patient?.diagnosis || ""}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Plan de Tratamiento</label>
+                                <textarea
+                                    name="treatmentPlan"
+                                    defaultValue={patient?.treatmentPlan || ""}
+                                    rows={4}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Condición Actual</label>
+                                <textarea
+                                    name="condition"
+                                    defaultValue={patient?.condition || ""}
+                                    rows={3}
+                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gamma-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-text-main dark:text-white mb-1">Notas de Evolución</label>
+                                <textarea
+                                    name="evolutionNotes"
+                                    defaultValue={patient?.evolutionNotes || ""}
+                                    rows={6}
+                                    className={cn(
+                                        "w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none resize-none",
+                                        !readOnly && "dark:bg-yellow-900/20"
+                                    )}
+                                />
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                {/* Medications Tab */}
+                <div className={cn("space-y-6", activeTab !== "medications" && "hidden")}>
+                    <MedicationSection
+                        medications={[]}
+                        readOnly={readOnly}
+                    />
+                </div>
+
+                {/* Treatments Tab */}
+                <div className={cn("space-y-6", activeTab !== "treatments" && "hidden")}>
+                    <TreatmentSection
+                        treatments={[]}
+                        readOnly={readOnly}
+                    />
+                </div>
+
+                {/* Health Metrics Tab */}
+                <div className={cn("space-y-6", activeTab !== "metrics" && "hidden")}>
+                    <HealthMetricsSection
+                        metrics={[]}
+                        readOnly={readOnly}
+                    />
                 </div>
 
                 <div className={cn("space-y-6", activeTab !== "appointments" && "hidden")}>

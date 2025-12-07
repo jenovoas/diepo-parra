@@ -52,13 +52,13 @@ export function Navbar() {
         <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5 transition-all duration-300">
             <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="font-accent text-2xl font-bold text-primary flex items-center gap-2">
-                    <Activity className="w-8 h-8" strokeWidth={1.5} />
+                <Link href="/" className="font-accent text-lg md:text-xl lg:text-2xl font-bold text-primary flex items-center gap-2 whitespace-nowrap">
+                    <Activity className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1.5} />
                     <span>DIEGO PARRA | Kinesiología</span>
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className="hidden md:flex items-center gap-4 lg:gap-8">
                     {navItems.map((item) => (
                         <Link
                             key={item.name}

@@ -81,8 +81,8 @@ export function ServicesSection() {
                                 href={`/servicios/${service.slug}`}
                                 key={idx}
                                 className={cn(
-                                    "service-card group relative p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 cursor-pointer",
-                                    "bg-surface border-gray-100 dark:border-white/5 hover:shadow-xl hover:shadow-primary/5",
+                                    "service-card group relative p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer",
+                                    "bg-surface border-gray-100 dark:border-white/5 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/20",
                                     service.featured && "border-primary/30 ring-1 ring-primary/30 shadow-lg shadow-primary/10"
                                 )}
                             >

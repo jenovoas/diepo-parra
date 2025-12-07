@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 type AnalyticsType = "patients" | "appointments" | "revenue";
 
@@ -7,6 +9,16 @@ export async function GET(
     req: Request,
     { params }: { params: Promise<{ type: string }> }
 ) {
+    // 🔒 SECURITY FIX: Add authentication check
+    const session = await getServerSession(authOptions);
+
+    if (!session || (session.user as any).role !== 'ADMIN') {
+        return NextResponse.json(
+            { error: "Unauthorized - Admin access required" },
+            { status: 401 }
+        );
+    }
+
     try {
         const { type: typeParam } = await params;
         const type = typeParam as AnalyticsType;
