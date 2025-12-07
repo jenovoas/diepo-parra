@@ -16,22 +16,42 @@ export function PaymentButton({ price }: PaymentButtonProps) {
     const handlePayment = async () => {
         setIsLoading(true);
 
-        // TODO: Here we would call the backend to create a MercadoPago Preference
-        // const response = await fetch('/api/checkout', { method: 'POST', body: JSON.stringify({ title, price }) })
-        // const data = await response.json()
-        // window.location.href = data.init_point
-
-        // SIMULATION: Simulate API delay and redirect to success
-        setTimeout(() => {
-            setIsLoading(false);
-            // Simulate 80% success rate for testing
-            const isSuccess = Math.random() > 0.1;
-            if (isSuccess) {
-                router.push("/checkout/success");
+        // Llamada real al backend para crear la preferencia de MercadoPago
+        try {
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ price })
+            });
+            const data = await response.json();
+            if (data.init_point) {
+                window.location.href = data.init_point;
+                return;
             } else {
+                console.error("No init_point returned");
                 router.push("/checkout/failure");
+                return;
             }
-        }, 1500);
+        } catch (error) {
+            console.error("Payment Error:", error);
+            router.push("/checkout/failure");
+            return;
+        }
+
+        // ---
+        // SIMULACIÓN (descomentar para pruebas locales sin backend):
+        // setTimeout(() => {
+        //     setIsLoading(false);
+        //     // Simula 80% de éxito
+        //     const isSuccess = Math.random() > 0.1;
+        //     if (isSuccess) {
+        //         router.push("/checkout/success");
+        //     } else {
+        //         router.push("/checkout/failure");
+        //     }
+        // }, 1500);
+        // ---
+
     };
 
     return (
