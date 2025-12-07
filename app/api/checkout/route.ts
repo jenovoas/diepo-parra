@@ -1,14 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import MercadoPagoConfig, { Preference } from "mercadopago";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-// Initialize MercadoPago with Access Token (Use Env Var in prod)
-// robust-access-token-placeholder
-const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN || 'TEST-4919106956263305-120615-55555555555555555555555555555555-123456789' });
+// Initialize MercadoPago with Access Token
+const client = new MercadoPagoConfig({
+    accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN || 'TEST-token'
+});
 
 export async function POST(req: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
         const body = await req.json();
-        const { items } = body;
+        const { items, serviceIds } = body;
+
+        // Get patient ID if user is logged in
+        let patientId = null;
+        let clientEmail = null;
+
+        if (session?.user) {
+            const patient = await prisma.patient.findFirst({
+                where: { userId: session.user.id as string },
+                include: { user: true },
+            });
+
+            if (patient) {
+                patientId = patient.id;
+                clientEmail = patient.user?.email;
+            }
+        }
 
         const preference = new Preference(client);
 
@@ -21,6 +42,11 @@ export async function POST(req: NextRequest) {
                     pending: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/checkout/pending`,
                 },
                 auto_return: "approved",
+                metadata: {
+                    patient_id: patientId,
+                    service_ids: JSON.stringify(serviceIds || []),
+                    email: clientEmail,
+                },
             }
         });
 

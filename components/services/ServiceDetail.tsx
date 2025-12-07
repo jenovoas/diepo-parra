@@ -17,6 +17,7 @@ export interface ServiceDetailProps {
     duration?: string;
     color?: string; // Tailwind class for color theme, e.g., "teal-600"
     id?: string; // Service ID for checkout
+    servicePriceId?: string; // Service Price ID from accounting module
 }
 
 export function ServiceDetail({

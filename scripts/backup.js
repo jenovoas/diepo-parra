@@ -9,6 +9,9 @@
  *   npm run backup:restore <backup-file>
  */
 
+// Load environment variables from .env file
+require('dotenv').config();
+
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -19,7 +22,7 @@ const DB_PATH = path.join(__dirname, '../prisma/dev.db');
 const ENCRYPTION_KEY = process.env.BACKUP_ENCRYPTION_KEY || process.env.ENCRYPTION_KEY;
 
 if (!ENCRYPTION_KEY) {
-    console.error('❌ Error: BACKUP_ENCRYPTION_KEY or ENCRYPTION_KEY must be set');
+    console.error('❌ Error: BACKUP_ENCRYPTION_KEY or ENCRYPTION_KEY must be set in .env file');
     process.exit(1);
 }
 

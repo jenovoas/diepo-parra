@@ -72,6 +72,7 @@ model Patient {
   healthMetrics     HealthMetric[]
   deviceConnections HealthDeviceConnection[]
   auditLogs         AuditLog[]
+  invoices          Invoice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -224,9 +225,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-  @@unique([identifier, token])
-}
-
 // Professional Signature Model (Ley 20.584 compliance)
 model ProfessionalSignature {
   id            String   @id @default(cuid())
@@ -248,4 +246,169 @@ model ProfessionalSignature {
   @@index([userId])
   @@index([documentId])
   @@index([documentType])
+}
+
+// ============================================
+// ACCOUNTING & INVOICING MODELS
+// ============================================
+
+// Invoices (Facturas/Boletas)
+model Invoice {
+  id              String   @id @default(cuid())
+  invoiceNumber   String   @unique // Folio
+  invoiceType     String   // BOLETA, FACTURA, NOTA_CREDITO, NOTA_DEBITO
+  dteType         Int?     // 39, 33, 61, 56 (null if not sent to SII yet)
+  
+  // Client info
+  patientId       String?
+  patient         Patient? @relation(fields: [patientId], references: [id])
+  clientRut       String?
+  clientName      String?
+  clientAddress   String?
+  clientEmail     String?
+  
+  // Amounts (all in CLP)
+  subtotal        Float    // Neto (sin IVA)
+  tax             Float    // IVA (19%)
+  total           Float    // Total (Neto + IVA)
+  
+  // Items
+  items           InvoiceItem[]
+  payments        Payment[]
+  
+  // DTE Info (SII Integration)
+  dteXml          String?   // XML firmado
+  dtePdfUrl       String?  // PDF URL
+  siiStatus       String?  // ACCEPTED, REJECTED, PENDING
+  siiTrackId      String?  // Track ID del SII
+  siiResponse     String?   // Respuesta del SII
+  
+  // Payment
+  paymentStatus   String   @default("PENDING") // PENDING, PARTIAL, PAID, OVERDUE, CANCELLED
+  paymentMethod   String?  // CASH, CARD, TRANSFER, MERCADOPAGO
+  paidAmount      Float    @default(0)
+  paidAt          DateTime?
+  
+  // Metadata
+  issuedAt        DateTime @default(now())
+  dueDate         DateTime?
+  notes           String?  
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([patientId])
+  @@index([invoiceNumber])
+  @@index([paymentStatus])
+  @@index([issuedAt])
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   // Precio unitario sin IVA
+  discount    Float   @default(0)
+  subtotal    Float   // (quantity * unitPrice) - discount
+  
+  // Service reference
+  serviceType String?
+  servicePriceId String?
+  servicePrice   ServicePrice? @relation(fields: [servicePriceId], references: [id])
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([invoiceId])
+  @@index([servicePriceId])
+}
+
+// Expenses (Gastos)
+model Expense {
+  id            String   @id @default(cuid())
+  
+  description   String
+  category      String   // SUPPLIES, RENT, UTILITIES, SALARIES, EQUIPMENT, MARKETING, OTHER
+  amount        Float    // Monto en CLP
+  
+  // Tax deductible
+  isDeductible  Boolean  @default(true)
+  hasInvoice    Boolean  @default(false)
+  supplierRut   String?
+  supplierName  String?
+  invoiceNumber String?
+  
+  // Payment
+  paymentMethod String   // CASH, CARD, TRANSFER, CHECK
+  paidAt        DateTime
+  
+  // Attachments
+  receiptUrl    String?
+  
+  notes         String?  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([category])
+  @@index([paidAt])
+  @@index([isDeductible])
+}
+
+// Service Pricing (Precios de Servicios)
+model ServicePrice {
+  id          String   @id @default(cuid())
+  
+  name        String   @unique
+  description String?  
+  category    String?  // KINESIOLOGIA, ACUPUNTURA, MASAJES, EVALUACION, OTHER
+  
+  // Pricing (all in CLP)
+  basePrice   Float    // Precio base sin IVA
+  taxRate     Float    @default(0.19) // 19% IVA
+  taxAmount   Float    // Monto del IVA
+  finalPrice  Float    // Precio final con IVA
+  
+  // Duration
+  durationMinutes Int? // Duración estimada en minutos
+  
+  // Status
+  isActive    Boolean  @default(true)
+  
+  // Relations
+  invoiceItems InvoiceItem[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([isActive])
+  @@index([category])
+}
+
+// Payment Records
+model Payment {
+  id            String   @id @default(cuid())
+  
+  invoiceId     String?
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+  
+  amount        Float    // Monto en CLP
+  method        String   // CASH, CARD, TRANSFER, MERCADOPAGO, CHECK
+  reference     String?  // Número de transferencia, cheque, etc.
+  
+  // MercadoPago integration
+  mpPaymentId   String?
+  mpStatus      String?
+  mpResponse    String?  
+  
+  // Metadata
+  paidAt        DateTime @default(now())
+  notes         String?
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([invoiceId])
+  @@index([paidAt])
+  @@index([method])
 }

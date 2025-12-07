@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { services } from "@/lib/data/services";
 import { ServiceDetail } from "@/components/services/ServiceDetail";
 import { getTranslations } from 'next-intl/server';
+import { prisma } from "@/lib/prisma";
 
 // Static generation params for known services
 export function generateStaticParams() {
@@ -60,6 +61,30 @@ export default async function ServicePage(props: Props) {
         // Features might not be defined for all services yet
     }
 
+    // Fetch real price from accounting module
+    let realPrice = service.price; // Fallback to static price
+    let servicePriceId: string | undefined = undefined;
+
+    try {
+        const servicePrice = await prisma.servicePrice.findFirst({
+            where: {
+                OR: [
+                    { name: { contains: t('title'), mode: 'insensitive' } },
+                    { name: { contains: service.id, mode: 'insensitive' } },
+                ],
+                isActive: true,
+            },
+        });
+
+        if (servicePrice) {
+            realPrice = servicePrice.finalPrice;
+            servicePriceId = servicePrice.id;
+        }
+    } catch (error) {
+        console.error('Error fetching service price:', error);
+        // Use fallback price
+    }
+
     return (
         <ServiceDetail
             title={t('title')}
@@ -68,10 +93,11 @@ export default async function ServicePage(props: Props) {
             imageSrc={service.image}
             benefits={benefits}
             features={features}
-            price={service.price}
+            price={realPrice}
             duration={service.duration}
             color={service.color.replace('text-', '')} // ServiceDetail expects color name like 'teal-600' not 'text-teal-600'
             id={service.id}
+            servicePriceId={servicePriceId}
         />
     )
 }

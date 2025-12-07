@@ -39,8 +39,12 @@ const AppointmentTooltip = ({ appointment, position }: { appointment: Appointmen
 
     return (
         <div
-            className="absolute z-10 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl w-72"
-            style={{ left: position.x + 15, top: position.y + 15 }}
+            className="fixed z-50 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl w-72 pointer-events-none"
+            style={{
+                left: `${position.x + 15}px`,
+                top: `${position.y + 15}px`,
+                transform: 'translateZ(0)' // Force GPU acceleration for smooth movement
+            }}
         >
             <p className="font-semibold text-base text-text-main dark:text-white mb-1">{appointment.patient.fullName}</p>
             {appointment.patient.phone && <p className="text-sm text-text-sec dark:text-gray-400 mb-1">{appointment.patient.phone}</p>}
@@ -208,8 +212,10 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                         );
                     })}
                 </div>
-                {hoveredAppointment && <AppointmentTooltip appointment={hoveredAppointment} position={tooltipPosition} />}
             </div>
+
+            {/* Tooltip rendered at document level for proper positioning */}
+            {hoveredAppointment && <AppointmentTooltip appointment={hoveredAppointment} position={tooltipPosition} />}
 
             {selectedAppointment && (
                 <AppointmentEditModal
