@@ -100,6 +100,15 @@ export function Navbar() {
 
                         {session ? (
                             <div className="flex items-center gap-2">
+                                {['ADMIN', 'DOCTOR', 'ASSISTANT'].includes((session.user as any).role) && (
+                                    <Link
+                                        href="/dashboard"
+                                        className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-2 text-primary font-bold")}
+                                    >
+                                        <Activity className="w-4 h-4" />
+                                        Dashboard
+                                    </Link>
+                                )}
                                 <Link
                                     href="/dashboard"
                                     className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}

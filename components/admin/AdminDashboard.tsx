@@ -5,6 +5,7 @@ import { Link } from "@/lib/navigation";
 import { Calendar, Users, Activity } from "lucide-react";
 import { Session } from "next-auth";
 import { PatientTable } from "./PatientTable";
+import { AppointmentCalendar } from "./AppointmentCalendar";
 
 interface Patient {
     id: string;
@@ -19,9 +20,20 @@ interface Patient {
     };
 }
 
+interface Appointment {
+    id: string;
+    date: Date;
+    serviceType: string;
+    patient: {
+        fullName: string;
+        riskIndex: string;
+    };
+}
+
 interface AdminDashboardProps {
     session: Session;
     patients: Patient[];
+    appointments?: Appointment[];
     stats: {
         totalPatients: number;
         pendingAppointments: number;
@@ -29,7 +41,7 @@ interface AdminDashboardProps {
     };
 }
 
-export function AdminDashboard({ session, patients, stats }: AdminDashboardProps) {
+export function AdminDashboard({ session, patients, appointments = [], stats }: AdminDashboardProps) {
     return (
         <div className="container mx-auto px-6 py-12">
             <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
@@ -72,6 +84,12 @@ export function AdminDashboard({ session, patients, stats }: AdminDashboardProps
                         <h3 className="text-2xl font-bold text-text-main">{stats.totalAppointments}</h3>
                     </div>
                 </div>
+            </div>
+
+            {/* Calendar & Quick Actions Grid maybe? For now just stacked */}
+            <div className="mb-12">
+                <h2 className="text-xl font-bold text-primary mb-6">Calendario de Citas</h2>
+                <AppointmentCalendar appointments={appointments} />
             </div>
 
             {/* Patients Table */}

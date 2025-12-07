@@ -20,6 +20,7 @@ export async function createPatient(formData: FormData) {
     const diagnosis = formData.get("diagnosis") as string;
     const treatmentPlan = formData.get("treatmentPlan") as string;
     const evolutionNotes = formData.get("evolutionNotes") as string;
+    const riskIndex = (formData.get("riskIndex") as string) || "LOW";
 
     // Check if user exists
     let user = await prisma.user.findUnique({
@@ -63,6 +64,7 @@ export async function createPatient(formData: FormData) {
             diagnosis,
             treatmentPlan,
             evolutionNotes,
+            riskIndex,
         },
     });
 
@@ -84,6 +86,7 @@ export async function updatePatient(id: string, formData: FormData) {
     const diagnosis = formData.get("diagnosis") as string;
     const treatmentPlan = formData.get("treatmentPlan") as string;
     const evolutionNotes = formData.get("evolutionNotes") as string;
+    const riskIndex = (formData.get("riskIndex") as string) || "LOW";
 
     await prisma.patient.update({
         where: { id },
@@ -100,6 +103,7 @@ export async function updatePatient(id: string, formData: FormData) {
             diagnosis,
             treatmentPlan,
             evolutionNotes,
+            riskIndex,
         },
     });
 

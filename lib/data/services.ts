@@ -7,6 +7,8 @@ import {
     Brain,
     Wind,
     Video,
+    Accessibility,
+    Baby,
 } from "lucide-react";
 
 export interface ServiceData {
@@ -108,6 +110,34 @@ export const services: ServiceData[] = [
         duration: "Adicional",
         color: "text-indigo-600",
         bgColor: "bg-indigo-50",
+        image: "/images/slider-info-3.png",
+    },
+    {
+        id: "kine-adulto-mayor",
+        slug: "kinesiologia-adulto-mayor",
+        icon: Accessibility,
+        title: "Kines. Adulto Mayor",
+        description: "Rehabilitación integral para mantener la funcionalidad, equilibrio e independencia en la tercera edad.",
+        longDescription: "Programa especializado para personas mayores enfocado en la prevención de caídas, mejora del equilibrio y mantenimiento de la funcionalidad. Trabajamos en el fortalecimiento muscular y la movilidad articular para asegurar una vejez activa y autovalente.",
+        benefits: ["Prevención de caídas", "Mejora del equilibrio", "Mantenimiento de la independencia", "Fortalecimiento general"],
+        price: "$50.000",
+        duration: "50 min",
+        color: "text-emerald-600",
+        bgColor: "bg-emerald-50",
+        image: "/images/slider-info-2.png",
+    },
+    {
+        id: "kine-pediatrica",
+        slug: "kinesiologia-pediatrica",
+        icon: Baby,
+        title: "Kines. Pediátrica",
+        description: "Atención especializada para el desarrollo motor y patologías respiratorias en niños y bebés.",
+        longDescription: "Atención kinésica dedicada a los más pequeños. Abordamos desde la estimulación temprana y alteraciones del desarrollo motor hasta el manejo de patologías respiratorias infantiles, siempre en un ambiente lúdico y seguro.",
+        benefits: ["Estimulación temprana", "Manejo respiratorio infantil", "Corrección postural", "Rehabilitación neurológica"],
+        price: "$50.000",
+        duration: "45 min",
+        color: "text-pink-600",
+        bgColor: "bg-pink-50",
         image: "/images/slider-info-3.png",
     },
     {

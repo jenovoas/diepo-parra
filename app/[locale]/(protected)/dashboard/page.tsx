@@ -36,10 +36,23 @@ export default async function DashboardPage() {
         });
         const totalAppointments = await prisma.appointment.count();
 
+        const appointments = await prisma.appointment.findMany({
+            include: {
+                patient: {
+                    select: {
+                        fullName: true,
+                        riskIndex: true,
+                    },
+                },
+            },
+            orderBy: { date: 'asc' },
+        });
+
         return (
             <AdminDashboard
                 session={session}
                 patients={patients}
+                appointments={appointments}
                 stats={{ totalPatients, pendingAppointments, totalAppointments }}
             />
         );
