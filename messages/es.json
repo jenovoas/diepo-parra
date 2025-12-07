@@ -1,0 +1,246 @@
+{
+    "Navbar": {
+        "home": "Inicio",
+        "services": "Servicios",
+        "about": "Sobre Mí",
+        "contact": "Contacto",
+        "emergency": "Emergencias"
+    },
+    "Hero": {
+        "title": "Kinesiología Integral",
+        "cta": "Agendar Hora",
+        "slides": {
+            "1": {
+                "title": "Rehabilitación Traumatológica",
+                "subtitle": "Kinesiología Musculoesquelética",
+                "description": "Tratamiento especializado para lesiones deportivas, post-quirúrgicos y dolor de espalda. Recupera tu funcionalidad máxima con terapia manual avanzada y ejercicio terapéutico.",
+                "cta": "Evaluar Lesión",
+                "secondaryCta": "Ver Servicios"
+            },
+            "2": {
+                "title": "Acupuntura Clínica",
+                "subtitle": "Manejo del Dolor y Ansiedad",
+                "description": "Abordaje neurofisiológico para lumbagos, ciática y cefaleas. Modulación del dolor mediante estimulación de puntos específicos para reducir la inflamación y promover el bienestar.",
+                "cta": "Ver Tratamientos"
+            },
+            "3": {
+                "title": "Atención Domiciliaria",
+                "subtitle": "Clínica Móvil en su Hogar",
+                "description": "Llevamos el equipamiento clínico necesario a su casa. Ideal para post-operados de cadera/rodilla o pacientes con movilidad reducida. Seguridad y comodidad garantizada.",
+                "cta": "Solicitar Visita"
+            }
+        }
+    },
+    "About": {
+        "title": "Diego Parra",
+        "subtitle": "Kinesiólogo & Acupuntor",
+        "p1": "Mi enfoque combina la ciencia de la rehabilitación física con la sabiduría de la medicina tradicional china. Creo firmemente que cada paciente merece un tratamiento personalizado que no solo alivie los síntomas, sino que también aborde la raíz del desequilibrio.",
+        "p2": "Desde la comodidad de tu hogar o en mi consulta, mi objetivo es acompañarte en tu proceso de recuperación para que vuelvas a moverte con libertad y sin dolor.",
+        "education": "Formación",
+        "educationVal": "UCSC Concepción",
+        "certification": "Certificaciones",
+        "certificationVal": "Acupuntura Clínica",
+        "coverage": "Cobertura",
+        "coverageVal": "Gran Concepción"
+    },
+    "Contact": {
+        "title": "Hablemos",
+        "subtitle": "¿Tienes dudas o necesitas agendar una hora? Contáctame por el medio que prefieras.",
+        "formTitle": "Reserva tu Hora",
+        "cards": {
+            "phone": {
+                "title": "Llámanos",
+                "action": "Llamar"
+            },
+            "email": {
+                "title": "Escríbenos",
+                "content": "Contacto Directo",
+                "action": "Enviar Correo"
+            }
+        },
+        "schedule": {
+            "title": "Horarios de Atención",
+            "weekdays": "Lunes - Viernes",
+            "saturdays": "Sábados",
+            "sundays": "Domingos y Festivos",
+            "closed": "Cerrado"
+        },
+        "form": {
+            "name": "Nombre Completo",
+            "phone": "Teléfono",
+            "email": "Correo Electrónico",
+            "service": "Servicio",
+            "date": "Fecha Preferente",
+            "message": "Mensaje / Motivo (Opcional)",
+            "submit": "Solicitar Reserva",
+            "sending": "Enviando...",
+            "success": "¡Mensaje Enviado!",
+            "error": "Error, intentar de nuevo",
+            "disclaimer": "* Te confirmaremos la disponibilidad por correo o WhatsApp."
+        }
+    },
+    "Services": {
+        "kinesiologia": {
+            "title": "Kinesiología Musculoesquelética",
+            "subtitle": "Rehabilitación & Movimiento",
+            "description": "Nuestra enfoque de Kinesiología Musculoesquelética está diseñado para tratar y rehabilitar disfunciones del sistema locomotor. Ya sea que sufras de dolor de espalda crónico, te estés recuperando de una cirugía de rodilla, o tengas una lesión deportiva, nuestro objetivo es devolverte tu funcionalidad completa.\n\nUtilizamos un enfoque basado en la evidencia que combina terapia manual avanzada, punción seca, y ejercicio terapéutico dosificado específicamente para tus necesidades. No solo nos enfocamos en el síntoma, sino en la causa biomecánica subyacente para asegurar resultados duraderos.",
+            "benefits": [
+                "Alivio efectivo del dolor musculoesquelético",
+                "Recuperación funcional post-lesiones",
+                "Rehabilitación post-quirúrgica acelerada",
+                "Corrección de postura y ergonomía",
+                "Prevención de futuras lesiones deportivas",
+                "Mejora en el rendimiento físico"
+            ],
+            "features": {
+                "1": {
+                    "title": "Evaluación Integral",
+                    "desc": "Análisis completo de biomecánica, movilidad y fuerza para identificar la causa raíz del problema."
+                },
+                "2": {
+                    "title": "Terapia Manual",
+                    "desc": "Técnicas especializadas de manipulación y movilización de tejidos para restaurar la función."
+                },
+                "3": {
+                    "title": "Ejercicio Terapéutico",
+                    "desc": "Planes de ejercicio personalizados para fortalecer, estabilizar y reeducar el movimiento."
+                },
+                "4": {
+                    "title": "Educación al Paciente",
+                    "desc": "Te enseñamos sobre tu condición y cómo manejarla para empoderarte en tu recuperación."
+                }
+            }
+        },
+        "acupuntura": {
+            "title": "Acupuntura Clínica",
+            "subtitle": "Medicina Tradicional China",
+            "description": "La Acupuntura es una técnica milenaria validada por la OMS y la ciencia moderna para el tratamiento de diversas condiciones de salud. En nuestra consulta, integramos esta sabiduría ancestral con el conocimiento clínico occidental para ofrecer un tratamiento seguro y efectivo.\n\nEs ideal para quienes buscan un manejo del dolor sin fármacos o como complemento a su tratamiento médico. Además de tratar el dolor físico, es altamente eficaz para regular el estrés, la ansiedad y trastornos del sueño, promoviendo un estado de equilibrio general (Homeostasis).",
+            "benefits": [
+                "Manejo efectivo del dolor crónico y agudo",
+                "Reducción del estrés y la ansiedad",
+                "Tratamiento complementario para migrañas",
+                "Mejora en la calidad del sueño",
+                "Equilibrio del sistema nervioso",
+                "Fortalecimiento del sistema inmunológico"
+            ],
+            "features": {
+                "1": {
+                    "title": "Diagnóstico MTC",
+                    "desc": "Evaluación completa según los principios de la Medicina Tradicional China (pulso, lengua, interrogatorio)."
+                },
+                "2": {
+                    "title": "Acupuntura Sistémica",
+                    "desc": "Inserción indolora de agujas estériles en puntos específicos para restablecer el flujo de energía (Qi)."
+                },
+                "3": {
+                    "title": "Manejo del Dolor",
+                    "desc": "Protocolos especializados para patologías dolorosas como lumbagos, artrosis y tendinitis."
+                },
+                "4": {
+                    "title": "Enfoque Holístico",
+                    "desc": "Tratamiento que considera no solo los síntomas físicos, sino también el bienestar emocional."
+                }
+            }
+        },
+        "list": {
+            "title": "Mis Servicios",
+            "subtitle": "Soluciones Integrales para tu Bienestar",
+            "items": {
+                "kine_musculo": {
+                    "title": "Kines. Musculoesquelética",
+                    "desc": "Rehabilitación avanzada para lesiones deportivas, traumatológicas, post-operatorios y dolores de espalda.",
+                    "longDesc": "La Kinesiología Musculoesquelética se enfoca en la evaluación y tratamiento de disfunciones del sistema locomotor. Utilizamos técnicas manuales, ejercicio terapéutico y agentes físicos para aliviar el dolor, recuperar el rango de movimiento y fortalecer la musculatura afectada. Ideal para esguinces, desgarros, tendinitis, lumbagos y recuperación post-quirúrgica.",
+                    "benefits": {
+                        "0": "Alivio del dolor agudo y crónico",
+                        "1": "Recuperación de la movilidad",
+                        "2": "Fortalecimiento muscular específico",
+                        "3": "Prevención de futuras lesiones"
+                    }
+                },
+                "acupuntura_dolor": {
+                    "title": "Acupuntura Dolor",
+                    "desc": "Tratamiento efectivo para lumbagos, ciática, tendinitis y dolores articulares crónicos.",
+                    "longDesc": "La acupuntura es una técnica milenaria de la Medicina Tradicional China que consiste en la inserción de finas agujas en puntos específicos del cuerpo. En el manejo del dolor, la acupuntura estimula la liberación de endorfinas y modula la señal dolorosa, ofreciendo un alivio potente y natural sin efectos secundarios farmacológicos.",
+                    "benefits": {
+                        "0": "Manejo del dolor sin fármacos",
+                        "1": "Reducción de la inflamación",
+                        "2": "Mejora de la circulación local",
+                        "3": "Efecto relajante muscular"
+                    }
+                },
+                "acupuntura_sm": {
+                    "title": "Acupuntura Salud Mental",
+                    "desc": "Enfoque terapéutico para manejo de estrés, ansiedad, insomnio y migrañas recurrentes.",
+                    "longDesc": "Más allá del dolor físico, la acupuntura es extremadamente efectiva para regular el sistema nervioso. Este tratamiento busca equilibrar el flujo energético (Qi) para calmar la mente, mejorar la calidad del sueño y reducir los niveles de estrés y ansiedad, promoviendo un estado de bienestar integral.",
+                    "benefits": {
+                        "0": "Reducción del estrés y ansiedad",
+                        "1": "Mejora la calidad del sueño",
+                        "2": "Equilibrio emocional",
+                        "3": "Alivio de cefaleas tensionales"
+                    }
+                },
+                "kine_respiratoria": {
+                    "title": "Kines. Respiratoria",
+                    "desc": "Manejo de patologías respiratorias (Asma, EPOC, Bronquitis) para adultos y niños. Limpieza bronquial.",
+                    "longDesc": "Especialidad dedicada a la prevención, evaluación y tratamiento de alteraciones del sistema respiratorio. Mediante técnicas manuales y ejercicios respiratorios, ayudamos a eliminar secreciones, mejorar la ventilación pulmonar y optimizar la función respiratoria en pacientes con cuadros agudos (bronquitis, neumonía) o crónicos (Asma, EPOC).",
+                    "benefits": {
+                        "0": "Eliminación de secreciones",
+                        "1": "Mejora de la capacidad pulmonar",
+                        "2": "Alivio de la dificultad respiratoria",
+                        "3": "Educación en uso de inhaladores"
+                    }
+                },
+                "masaje": {
+                    "title": "Masaje Terapéutico",
+                    "desc": "Técnicas manuales profundas para alivio de contracturas, descarga muscular y relajación.",
+                    "longDesc": "El masaje terapéutico no es solo relajación; es una herramienta clínica para tratar tejidos blandos acortados o tensos. Utilizamos técnicas de masaje profundo, liberación miofascial y puntos gatillo para 'soltar' la musculatura, mejorar la irrigación sanguínea y proporcionar un alivio inmediato de la tensión acumulada.",
+                    "benefits": {
+                        "0": "Alivio de contracturas musculares",
+                        "1": "Reducción del estrés físico",
+                        "2": "Mejora de la circulación sanguínea",
+                        "3": "Aumento de la flexibilidad"
+                    }
+                },
+                "domicilio": {
+                    "title": "Kinesiología Domicilio",
+                    "desc": "Rehabilitación en tu hogar con equipamiento completo. Valdivia, Concepción y Curanilahue.",
+                    "longDesc": "Llevamos la clínica a tu casa. Servicio ideal para pacientes post-operados de cadera/rodilla, personas mayores con dificultad de desplazamiento o simplemente para quienes prefieren la comodidad y seguridad de su hogar. Llevamos camilla, insumos y equipos de fisioterapia necesarios para una atención de calidad.",
+                    "benefits": {
+                        "0": "Comodidad y ahorro de tiempo",
+                        "1": "Atención en entorno familiar",
+                        "2": "Ideal para movilidad reducida",
+                        "3": "Sin tiempos de espera"
+                    }
+                }
+            }
+        }
+    },
+    "Footer": {
+        "description": "Kinesiología integral y medicina tradicional china para recuperar tu equilibrio y bienestar. Atención personalizada en consulta y a domicilio.",
+        "quickLinks": "Enlaces Rápidos",
+        "home": "Inicio",
+        "services": "Servicios",
+        "about": "Sobre Mí",
+        "contact": "Reservar Hora",
+        "privacy": "Política de Privacidad",
+        "followUs": "Síguenos",
+        "rights": "Diego Parra Kinesiología. Todos los derechos reservados.",
+        "madeWith": "Hecho con",
+        "inChile": "en Chile",
+        "developedBy": "Desarrollado por"
+    },
+    "Checkout": {
+        "Success": {
+            "title": "¡Pago Exitoso!",
+            "message": "Tu reserva ha sido confirmada. Hemos enviado los detalles a tu correo electrónico.",
+            "txId": "ID de Transacción:",
+            "backHome": "Volver al Inicio"
+        },
+        "Failure": {
+            "title": "Pago Fallido",
+            "message": "Hubo un problema procesando tu pago. Por favor intenta nuevamente o contáctanos si el problema persiste.",
+            "tryAgain": "Intentar de Nuevo",
+            "support": "Contactar Soporte"
+        }
+    }
+}

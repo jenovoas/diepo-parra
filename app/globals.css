@@ -1,33 +1,66 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #1F8E7E;
-  --color-secondary: #F5F3EE;
-  --color-accent: #E8D5C4;
-  --color-text-main: #2C3E50;
-  --color-text-sec: #7F8C8D;
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-text-main: var(--text-main);
+  --color-text-sec: var(--text-sec);
 
-  --font-raleway: var(--font-raleway);
-  --font-inter: var(--font-inter);
-  --font-playfair: var(--font-playfair);
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+
+  --font-outfit: var(--font-outfit);
+  --font-jakarta: var(--font-jakarta);
+  --font-cormorant: var(--font-cormorant);
 }
 
 :root {
-  --background: #F5F3EE; /* Using secondary/cream as base background per zen theme */
-  --foreground: #2C3E50; /* Text main */
+  /* Light Mode (Zen/Cream) */
+  --primary: #1F8E7E;
+  --secondary: #F5F3EE;
+  /* Cream background */
+  --accent: #E8D5C4;
+  --text-main: #2C3E50;
+  --text-sec: #7F8C8D;
+  --background: #F5F3EE;
+  --surface: #FFFFFF;
+  /* For cards */
+  --foreground: #2C3E50;
+}
+
+.dark {
+  /* Ultra Dark / Midnight Palette */
+  --primary: #2AB3A0;
+  --secondary: #0A0A0A;
+  /* Much darker secondary */
+  --accent: #1A1A1A;
+  --text-main: #EAEAEA;
+  --text-sec: #888888;
+  --background: #050505;
+  /* Almost black */
+  --surface: #121212;
+  /* Standard dark mode surface */
+  --foreground: #EAEAEA;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-jakarta), sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Base Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-raleway), sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-outfit), sans-serif;
 }
 
 .font-accent {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-cormorant), serif;
 }

@@ -1,58 +1,63 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight, Phone, Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import gsap from "gsap";
 import { cn } from "@/lib/utils/cn";
 
-const slides = [
-    {
-        id: 1,
-        title: "Recupera tu Movimiento",
-        subtitle: "Kinesiología integral y personalizada para tu bienestar físico.",
-        description: "Tratamientos especializados en rehabilitación musculoesquelética, deportiva y post-operatoria. Tu cuerpo merece el mejor cuidado.",
-        cta: "Reservar Hora",
-        ctaLink: "/login", // Link to login/booking
-        secondaryCta: "Saber Más",
-        secondaryLink: "#services",
-        image: "/images/hero-1.jpg",
-        color: "bg-primary",
-    },
-    {
-        id: 2,
-        title: "Sanación a Domicilio",
-        subtitle: "Llevamos la consulta a la comodidad de tu hogar.",
-        description: "Atención profesional en Concepción y alrededores. Ideal para pacientes con movilidad reducida o post-operatorios.",
-        cta: "Solicitar Visita",
-        ctaLink: "#contact",
-        image: "/images/hero-2.jpg",
-        color: "bg-accent",
-    },
-    {
-        id: 3,
-        title: "Atención de Urgencia",
-        subtitle: "¿Dolor agudo o lesión repentina?",
-        description: "Protocolos de atención rápida para aliviar el dolor y prevenir complicaciones mayores. Contáctanos de inmediato.",
-        cta: "Llamar Ahora",
-        ctaIcon: <Phone className="w-5 h-5 mr-2" />,
-        ctaLink: "tel:+56998765432",
-        image: "/images/hero-3.jpg",
-        color: "bg-red-500", // Emergency color override
-        theme: "dark",
-    },
-];
+
+import { useTranslations } from 'next-intl';
 
 export function HeroSlider() {
+    const t = useTranslations('Hero.slides');
     const [current, setCurrent] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
-    const nextSlide = () => {
+    const slides = [
+        {
+            id: 1,
+            title: t('1.title'),
+            subtitle: t('1.subtitle'),
+            description: t('1.description'),
+            cta: t('1.cta'),
+            ctaLink: "#contact",
+            secondaryCta: t('1.secondaryCta'),
+            secondaryLink: "#services",
+            image: "/images/slider-info-1.png",
+            color: "bg-teal-600",
+        },
+        {
+            id: 2,
+            title: t('2.title'),
+            subtitle: t('2.subtitle'),
+            description: t('2.description'),
+            cta: t('2.cta'),
+            ctaLink: "/servicios/acupuntura",
+            image: "/images/slider-info-2.png",
+            color: "bg-amber-600",
+        },
+        {
+            id: 3,
+            title: t('3.title'),
+            subtitle: t('3.subtitle'),
+            description: t('3.description'),
+            cta: t('3.cta'),
+            ctaLink: "#contact",
+            ctaIcon: <Phone className="w-5 h-5 mr-2" />,
+            image: "/images/slider-info-3.png",
+            color: "bg-red-600",
+            theme: "dark",
+        },
+    ];
+
+    const nextSlide = useCallback(() => {
         setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    };
+    }, [slides.length]);
 
     const prevSlide = () => {
         setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
@@ -87,10 +92,13 @@ export function HeroSlider() {
             ctx.revert();
             clearInterval(interval);
         };
-    }, [current]);
+    }, [current, nextSlide]);
 
     return (
         <div ref={slideRef} className="relative h-[85vh] w-full overflow-hidden flex items-center bg-secondary/30">
+            {/* Watermark Logo */}
+            {/* 3D Animated Watermark */}
+            {/* Watermark Logo Removed by user request */}
 
             {/* Background/Slide Content */}
             <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center h-full relative z-10">
@@ -111,31 +119,38 @@ export function HeroSlider() {
                     </p>
 
                     <div className="flex flex-wrap gap-4 pt-4">
-                        <Button size="lg" className="text-lg px-8 shadow-xl shadow-primary/20">
-                            {slides[current].ctaIcon || <Calendar className="w-5 h-5 mr-2" />}
-                            {slides[current].cta}
-                        </Button>
-                        {slides[current].secondaryCta && (
-                            <Button variant="outline" size="lg" className="text-lg">
-                                {slides[current].secondaryCta}
-                                <ArrowRight className="w-5 h-5 ml-2" />
+                        <Link href={slides[current].ctaLink}>
+                            <Button size="lg" className="text-lg px-8 shadow-xl shadow-primary/20">
+                                {slides[current].ctaIcon || <Calendar className="w-5 h-5 mr-2" />}
+                                {slides[current].cta}
                             </Button>
+                        </Link>
+                        {slides[current].secondaryCta && slides[current].secondaryLink && (
+                            <Link href={slides[current].secondaryLink}>
+                                <Button variant="outline" size="lg" className="text-lg">
+                                    {slides[current].secondaryCta}
+                                    <ArrowRight className="w-5 h-5 ml-2" />
+                                </Button>
+                            </Link>
                         )}
                     </div>
                 </div>
 
                 {/* Image/Visual Section */}
-                <div ref={imageRef} className="relative hidden md:block h-[500px]">
-                    {/* Abstract Shape Background */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/30 rounded-[2rem] transform rotate-3 scale-95 blur-2xl" />
+                {/* Image/Visual Section */}
+                <div ref={imageRef} className="relative hidden md:block h-[500px] w-full">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/30 rounded-[2rem] transform rotate-3 scale-95 blur-2xl -z-10" />
 
-                    {/* Card Content Placeholder (Replacing Image for now until assets exist) */}
-                    <div className="absolute inset-0 bg-white/40 backdrop-blur-sm border border-white/50 rounded-[2rem] shadow-2xl flex items-center justify-center overflow-hidden">
-                        <div className="bg-gradient-to-br from-primary to-primary/80 text-white p-12 rounded-xl text-center">
-                            <p className="font-accent text-3xl mb-4">Diego Parra</p>
-                            <p className="opacity-80">Kinesiólogo Certificado</p>
-                            <div className="mt-6 text-6xl opacity-20">⚕️</div>
-                        </div>
+                    <div className="relative h-full w-full rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white">
+                        <Image
+                            src={slides[current].image}
+                            alt={slides[current].title}
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                        {/* Optional Overlay to ensure text readability if needed, though side-by-side design usually fine */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>
                 </div>
             </div>

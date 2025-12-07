@@ -1,0 +1,246 @@
+{
+    "Navbar": {
+        "home": "Home",
+        "services": "Services",
+        "about": "About",
+        "contact": "Contact",
+        "emergency": "Emergency"
+    },
+    "Hero": {
+        "title": "Integral Kinesiology",
+        "cta": "Book Now",
+        "slides": {
+            "1": {
+                "title": "Trauma Rehabilitation",
+                "subtitle": "Musculoskeletal Kinesiology",
+                "description": "Specialized treatment for sports injuries, post-surgery, and back pain. Recover maximum functionality with advanced manual therapy and therapeutic exercise.",
+                "cta": "Evaluate Injury",
+                "secondaryCta": "View Services"
+            },
+            "2": {
+                "title": "Clinical Acupuncture",
+                "subtitle": "Pain & Anxiety Management",
+                "description": "Neurophysiological approach for lower back pain, sciatica, and headaches. Pain modulation through specific point stimulation to reduce inflammation and promote well-being.",
+                "cta": "View Treatments"
+            },
+            "3": {
+                "title": "Home Care Service",
+                "subtitle": "Mobile Clinic at Your Home",
+                "description": "We bring necessary clinical equipment to your home. Ideal for hip/knee post-op patients or those with reduced mobility. Safety and comfort guaranteed.",
+                "cta": "Request Visit"
+            }
+        }
+    },
+    "About": {
+        "title": "Diego Parra",
+        "subtitle": "Kinesiologist & Acupuncturist",
+        "p1": "My approach combines the science of physical rehabilitation with the wisdom of Traditional Chinese Medicine. I firmly believe that every patient deserves a personalized treatment that not only alleviates symptoms but also addresses the root of the imbalance.",
+        "p2": "From the comfort of your home or in my clinic, my goal is to accompany you in your recovery process so you can move freely and without pain again.",
+        "education": "Education",
+        "educationVal": "UCSC Concepción",
+        "certification": "Certifications",
+        "certificationVal": "Clinical Acupuncture",
+        "coverage": "Coverage",
+        "coverageVal": "Greater Concepción"
+    },
+    "Contact": {
+        "title": "Let's Talk",
+        "subtitle": "Have questions or need to schedule an appointment? Contact me through your preferred medium.",
+        "formTitle": "Book Appointment",
+        "cards": {
+            "phone": {
+                "title": "Call Us",
+                "action": "Call"
+            },
+            "email": {
+                "title": "Email Us",
+                "content": "Direct Contact",
+                "action": "Send Email"
+            }
+        },
+        "schedule": {
+            "title": "Opening Hours",
+            "weekdays": "Monday - Friday",
+            "saturdays": "Saturdays",
+            "sundays": "Sundays & Holidays",
+            "closed": "Closed"
+        },
+        "form": {
+            "name": "Full Name",
+            "phone": "Phone",
+            "email": "Email Address",
+            "service": "Service",
+            "date": "Preferred Date",
+            "message": "Message / Reason (Optional)",
+            "submit": "Request Booking",
+            "sending": "Sending...",
+            "success": "Message Sent!",
+            "error": "Error, please try again",
+            "disclaimer": "* We will confirm availability via email or WhatsApp."
+        }
+    },
+    "Services": {
+        "kinesiologia": {
+            "title": "Musculoskeletal Kinesiology",
+            "subtitle": "Rehabilitation & Movement",
+            "description": "Our Musculoskeletal Kinesiology approach is designed to treat and rehabilitate dysfunctions of the locomotor system. Whether you suffer from chronic back pain, are recovering from knee surgery, or have a sports injury, our goal is to restore your full functionality.\n\nWe use an evidence-based approach combining advanced manual therapy, dry needling, and therapeutic exercise specifically dosed for your needs. We don't just focus on the symptom, but on the underlying biomechanical cause to ensure lasting results.",
+            "benefits": [
+                "Effective relief of musculoskeletal pain",
+                "Functional recovery post-injury",
+                "Accelerated post-surgical rehabilitation",
+                "Posture correction and ergonomics",
+                "Prevention of future sports injuries",
+                "Improvement in physical performance"
+            ],
+            "features": {
+                "1": {
+                    "title": "Comprehensive Evaluation",
+                    "desc": "Complete analysis of biomechanics, mobility, and strength to identify the root cause of the problem."
+                },
+                "2": {
+                    "title": "Manual Therapy",
+                    "desc": "Specialized tissue manipulation and mobilization techniques to restore function."
+                },
+                "3": {
+                    "title": "Therapeutic Exercise",
+                    "desc": "Personalized exercise plans to strengthen, stabilize, and re-educate movement."
+                },
+                "4": {
+                    "title": "Patient Education",
+                    "desc": "We teach you about your condition and how to manage it to empower you in your recovery."
+                }
+            }
+        },
+        "acupuntura": {
+            "title": "Clinical Acupuncture",
+            "subtitle": "Traditional Chinese Medicine",
+            "description": "Acupuncture is an ancient technique validated by the WHO and modern science for the treatment of various health conditions. In our practice, we integrate this ancestral wisdom with Western clinical knowledge to offer safe and effective treatment.\n\nIt is ideal for those seeking pain management without drugs or as a complement to their medical treatment. In addition to treating physical pain, it is highly effective for regulating stress, anxiety, and sleep disorders, promoting a state of general equilibrium (Homeostasis).",
+            "benefits": [
+                "Effective chronic and acute pain management",
+                "Stress and anxiety reduction",
+                "Complementary treatment for migraines",
+                "Improved sleep quality",
+                "Nervous system balance",
+                "Immune system strengthening"
+            ],
+            "features": {
+                "1": {
+                    "title": "TCM Diagnosis",
+                    "desc": "Complete evaluation according to Traditional Chinese Medicine principles (pulse, tongue, inquiry)."
+                },
+                "2": {
+                    "title": "Systemic Acupuncture",
+                    "desc": "Painless insertion of sterile needles at specific points to restore energy flow (Qi)."
+                },
+                "3": {
+                    "title": "Pain Management",
+                    "desc": "Specialized protocols for painful conditions such as lumbago, osteoarthritis, and tendonitis."
+                },
+                "4": {
+                    "title": "Holistic Approach",
+                    "desc": "Treatment that considers not only physical symptoms but also emotional well-being."
+                }
+            }
+        },
+        "list": {
+            "title": "My Services",
+            "subtitle": "Comprehensive Solutions for Your Well-being",
+            "items": {
+                "kine_musculo": {
+                    "title": "Musculoskeletal Kin.",
+                    "desc": "Advanced rehabilitation for sports injuries, trauma, post-surgery, and back pain.",
+                    "longDesc": "Musculoskeletal Kinesiology focuses on the assessment and treatment of locomotor system dysfunctions. We use manual techniques, therapeutic exercise, and physical agents to relieve pain, restore range of motion, and strengthen affected muscles. Ideal for sprains, tears, tendonitis, back pain, and post-surgical recovery.",
+                    "benefits": {
+                        "0": "Acute and chronic pain relief",
+                        "1": "Mobility recovery",
+                        "2": "Specific muscle strengthening",
+                        "3": "Prevention of future injuries"
+                    }
+                },
+                "acupuntura_dolor": {
+                    "title": "Pain Acupuncture",
+                    "desc": "Effective treatment for lumbago, sciatica, tendonitis, and chronic joint pain.",
+                    "longDesc": "Acupuncture is an ancient Traditional Chinese Medicine technique that involves inserting fine needles into specific points of the body. For pain management, acupuncture stimulates endorphin release and modulates pain signals, offering potent and natural relief without pharmacological side effects.",
+                    "benefits": {
+                        "0": "Drug-free pain management",
+                        "1": "Inflammation reduction",
+                        "2": "Improved local circulation",
+                        "3": "Muscle relaxing effect"
+                    }
+                },
+                "acupuntura_sm": {
+                    "title": "Mental Health Acupuncture",
+                    "desc": "Therapeutic approach for managing stress, anxiety, insomnia, and recurrent migraines.",
+                    "longDesc": "Beyond physical pain, acupuncture is extremely effective for regulating the nervous system. This treatment seeks to balance energy flow (Qi) to calm the mind, improve sleep quality, and reduce stress and anxiety levels, promoting a state of comprehensive well-being.",
+                    "benefits": {
+                        "0": "Stress and anxiety reduction",
+                        "1": "Improved sleep quality",
+                        "2": "Emotional balance",
+                        "3": "Tension headache relief"
+                    }
+                },
+                "kine_respiratoria": {
+                    "title": "Respiratory Kin.",
+                    "desc": "Management of respiratory pathologies (Asthma, COPD, Bronchitis) for adults and children. Bronchial clearing.",
+                    "longDesc": "Specialty dedicated to the prevention, assessment, and treatment of respiratory system alterations. Through manual techniques and breathing exercises, we help eliminate secretions, improve pulmonary ventilation, and optimize respiratory function in patients with acute (bronchitis, pneumonia) or chronic (Asthma, COPD) conditions.",
+                    "benefits": {
+                        "0": "Secretion clearance",
+                        "1": "Improved lung capacity",
+                        "2": "Breathing difficulty relief",
+                        "3": "Inhaler use education"
+                    }
+                },
+                "masaje": {
+                    "title": "Therapeutic Massage",
+                    "desc": "Deep manual techniques for relief of contractures, muscle release, and relaxation.",
+                    "longDesc": "Therapeutic massage is not just relaxation; it's a clinical tool to treat shortened or tense soft tissues. We use deep massage techniques, myofascial release, and trigger points to 'release' muscles, improve blood irrigation, and provide immediate relief from accumulated tension.",
+                    "benefits": {
+                        "0": "Muscle contracture relief",
+                        "1": "Physical stress reduction",
+                        "2": "Improved blood circulation",
+                        "3": "Increased flexibility"
+                    }
+                },
+                "domicilio": {
+                    "title": "Home Kinesiology",
+                    "desc": "Rehabilitation in your home with full equipment. Valdivia, Concepción, and Curanilahue.",
+                    "longDesc": "We bring the clinic to your home. Ideal service for postoperative hip/knee patients, seniors with mobility difficulties, or simply those who prefer the comfort and safety of their home. We bring a table, supplies, and necessary physiotherapy equipment for quality care.",
+                    "benefits": {
+                        "0": "Comfort and time saving",
+                        "1": "Care in a familiar environment",
+                        "2": "Ideal for reduced mobility",
+                        "3": "No waiting times"
+                    }
+                }
+            }
+        }
+    },
+    "Footer": {
+        "description": "Integral kinesiology and traditional Chinese medicine to restore your balance and well-being. Personalized attention in consultation and at home.",
+        "quickLinks": "Quick Links",
+        "home": "Home",
+        "services": "Services",
+        "about": "About Me",
+        "contact": "Book Appointment",
+        "privacy": "Privacy Policy",
+        "followUs": "Follow Us",
+        "rights": "Diego Parra Kinesiology. All rights reserved.",
+        "madeWith": "Made with",
+        "inChile": "in Chile",
+        "developedBy": "Developed by"
+    },
+    "Checkout": {
+        "Success": {
+            "title": "Payment Successful!",
+            "message": "Your booking has been confirmed. We have sent the details to your email.",
+            "txId": "Transaction ID:",
+            "backHome": "Back to Home"
+        },
+        "Failure": {
+            "title": "Payment Failed",
+            "message": "There was a problem processing your payment. Please try again or contact us if the problem persists.",
+            "tryAgain": "Try Again",
+            "support": "Contact Support"
+        }
+    }
+}

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { Calendar, User as UserIcon, Clock, FileText } from "lucide-react";
+import { Calendar, Clock, FileText } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default async function DashboardPage() {

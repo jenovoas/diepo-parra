@@ -1,11 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Phone, Mail, MapPin, Clock, Send, Calendar } from "lucide-react";
+import { useState } from "react";
+import { Phone, Mail, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
+import { ClientOnly } from "@/components/ui/ClientOnly";
+
+import { useTranslations } from 'next-intl';
+
+interface ContactCardProps {
+    icon: React.ElementType;
+    title: string;
+    content: string;
+    action: string;
+    href: string;
+}
 
 export function ContactSection() {
+    const t = useTranslations('Contact');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
@@ -46,137 +58,132 @@ export function ContactSection() {
                     {/* Left Column: Contact Info */}
                     <div className="space-y-8">
                         <div>
-                            <h2 className="text-4xl font-bold font-accent text-text-main mb-4">Hablemos</h2>
+                            <h2 className="text-4xl font-bold font-accent text-text-main mb-4">{t('title')}</h2>
                             <p className="text-lg text-text-sec">
-                                ¿Tienes dudas o necesitas agendar una hora? Contáctame por el medio que prefieras.
+                                {t('subtitle')}
                             </p>
                         </div>
 
                         <div className="space-y-6">
                             <ContactCard
                                 icon={Phone}
-                                title="Llámanos"
+                                title={t('cards.phone.title')}
                                 content="+56 9 •••• ••••"
-                                action="Llamar"
+                                action={t('cards.phone.action')}
                                 href="tel:+56998765432"
                             />
                             <ContactCard
                                 icon={Mail}
-                                title="Escríbenos"
-                                content="Contacto Directo"
-                                action="Enviar Correo"
+                                title={t('cards.email.title')}
+                                content={t('cards.email.content')}
+                                action={t('cards.email.action')}
                                 href="mailto:diego.parra@ejemplo.cl"
                             />
-                            <ContactCard
-                                icon={MapPin}
-                                title="Visítanos"
-                                content="Valdivia - Concepción - Curanilahue"
-                                action="Ver Mapa"
-                                href="#"
-                            />
+
                         </div>
 
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div className="bg-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5">
                             <h3 className="font-bold text-text-main mb-4 flex items-center gap-2">
                                 <Clock className="w-5 h-5 text-primary" />
-                                Horarios de Atención
+                                {t('schedule.title')}
                             </h3>
                             <div className="space-y-2 text-sm text-text-sec">
                                 <div className="flex justify-between">
-                                    <span>Lunes - Viernes</span>
+                                    <span>{t('schedule.weekdays')}</span>
                                     <span className="font-medium text-text-main">09:00 - 19:00</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span>Sábados</span>
+                                    <span>{t('schedule.saturdays')}</span>
                                     <span className="font-medium text-text-main">10:00 - 14:00</span>
                                 </div>
                                 <div className="flex justify-between text-red-500">
-                                    <span>Domingos y Festivos</span>
-                                    <span>Cerrado</span>
+                                    <span>{t('schedule.sundays')}</span>
+                                    <span>{t('schedule.closed')}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Right Column: Reservation Form */}
-                    <div className="bg-white p-8 rounded-3xl shadow-xl shadow-primary/5 border border-primary/10">
-                        <h3 className="text-2xl font-bold font-accent text-text-main mb-6">Reserva tu Hora</h3>
+                    <div className="bg-surface p-8 rounded-3xl shadow-xl shadow-primary/5 border border-primary/10 dark:border-white/5">
+                        <h3 className="text-2xl font-bold font-accent text-text-main mb-6">{t('formTitle')}</h3>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
-                            <div className="grid md:grid-cols-2 gap-5">
+                            <ClientOnly>
+                                <div className="grid md:grid-cols-2 gap-5">
+                                    <div className="space-y-2">
+                                        <label htmlFor="name" className="text-sm font-medium text-text-main">{t('form.name')}</label>
+                                        <input
+                                            required
+                                            name="name"
+                                            type="text"
+                                            id="name"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            placeholder="Juan Pérez"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label htmlFor="phone" className="text-sm font-medium text-text-main">{t('form.phone')}</label>
+                                        <input
+                                            required
+                                            name="phone"
+                                            type="tel"
+                                            id="phone"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            placeholder="+56 9..."
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="space-y-2">
-                                    <label htmlFor="name" className="text-sm font-medium text-text-main">Nombre Completo</label>
+                                    <label htmlFor="email" className="text-sm font-medium text-text-main">{t('form.email')}</label>
                                     <input
                                         required
-                                        name="name"
-                                        type="text"
-                                        id="name"
+                                        name="email"
+                                        type="email"
+                                        id="email"
                                         className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                                        placeholder="Juan Pérez"
+                                        placeholder="juan@ejemplo.com"
                                     />
                                 </div>
+
+                                <div className="grid md:grid-cols-2 gap-5">
+                                    <div className="space-y-2">
+                                        <label htmlFor="service" className="text-sm font-medium text-text-main">{t('form.service')}</label>
+                                        <select
+                                            name="service"
+                                            id="service"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-surface"
+                                        >
+                                            <option>Kinesiología</option>
+                                            <option>Acupuntura</option>
+                                            <option>Masaje Terapéutico</option>
+                                            <option>Evaluación</option>
+                                            <option>Domicilio</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label htmlFor="date" className="text-sm font-medium text-text-main">{t('form.date')}</label>
+                                        <input
+                                            name="date"
+                                            type="date"
+                                            id="date"
+                                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="space-y-2">
-                                    <label htmlFor="phone" className="text-sm font-medium text-text-main">Teléfono</label>
-                                    <input
-                                        required
-                                        name="phone"
-                                        type="tel"
-                                        id="phone"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                                        placeholder="+56 9..."
+                                    <label htmlFor="message" className="text-sm font-medium text-text-main">{t('form.message')}</label>
+                                    <textarea
+                                        name="message"
+                                        id="message"
+                                        rows={4}
+                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                                        placeholder="Describe brevemente tu dolor o consulta..."
                                     />
                                 </div>
-                            </div>
-
-                            <div className="space-y-2" suppressHydrationWarning={true}>
-                                <label htmlFor="email" className="text-sm font-medium text-text-main">Correo Electrónico</label>
-                                <input
-                                    required
-                                    suppressHydrationWarning={true}
-                                    name="email"
-                                    type="email"
-                                    id="email"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                                    placeholder="juan@ejemplo.com"
-                                />
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-5">
-                                <div className="space-y-2">
-                                    <label htmlFor="service" className="text-sm font-medium text-text-main">Servicio</label>
-                                    <select
-                                        name="service"
-                                        id="service"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-white"
-                                    >
-                                        <option>Kinesiología</option>
-                                        <option>Acupuntura</option>
-                                        <option>Masaje Terapéutico</option>
-                                        <option>Evaluación</option>
-                                        <option>Domicilio</option>
-                                    </select>
-                                </div>
-                                <div className="space-y-2">
-                                    <label htmlFor="date" className="text-sm font-medium text-text-main">Fecha Preferente</label>
-                                    <input
-                                        name="date"
-                                        type="date"
-                                        id="date"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-medium text-text-main">Mensaje / Motivo (Opcional)</label>
-                                <textarea
-                                    name="message"
-                                    id="message"
-                                    rows={4}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
-                                    placeholder="Describe brevemente tu dolor o consulta..."
-                                />
-                            </div>
+                            </ClientOnly>
 
                             <Button
                                 type="submit"
@@ -187,16 +194,16 @@ export function ContactSection() {
                                     submitStatus === "error" && "bg-red-600 hover:bg-red-700"
                                 )}
                             >
-                                {isSubmitting ? "Enviando..." :
-                                    submitStatus === "success" ? "¡Mensaje Enviado!" :
-                                        submitStatus === "error" ? "Error, intentar de nuevo" : (
+                                {isSubmitting ? t('form.sending') :
+                                    submitStatus === "success" ? t('form.success') :
+                                        submitStatus === "error" ? t('form.error') : (
                                             <>
-                                                Solicitar Reserva <Send className="w-4 h-4 ml-2" />
+                                                {t('form.submit')} <Send className="w-4 h-4 ml-2" />
                                             </>
                                         )}
                             </Button>
                             <p className="text-xs text-center text-text-sec">
-                                * Te confirmaremos la disponibilidad por correo o WhatsApp.
+                                {t('form.disclaimer')}
                             </p>
                         </form>
                     </div>
@@ -207,9 +214,9 @@ export function ContactSection() {
     );
 }
 
-function ContactCard({ icon: Icon, title, content, action, href }: any) {
+function ContactCard({ icon: Icon, title, content, action, href }: ContactCardProps) {
     return (
-        <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:border-primary/30 transition-colors group">
+        <div className="flex items-center gap-4 bg-surface p-4 rounded-xl shadow-sm border border-gray-100 dark:border-white/5 hover:border-primary/30 transition-colors group">
             <div className="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                 <Icon className="w-5 h-5 text-primary" />
             </div>

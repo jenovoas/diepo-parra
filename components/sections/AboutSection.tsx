@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { GraduationCap, Award, MapPin, BadgeCheck } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cn } from "@/lib/utils/cn";
+
+import { useTranslations } from 'next-intl';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function AboutSection() {
+    const t = useTranslations('About');
     const containerRef = useRef<HTMLElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
@@ -88,19 +91,16 @@ export function AboutSection() {
                 {/* Content Column */}
                 <div ref={textRef} className="space-y-8">
                     <div className="space-y-4">
-                        <h2 className="text-4xl font-bold font-accent text-text-main">Diego Parra</h2>
-                        <p className="text-xl text-primary font-medium">Kinesiólogo & Acupuntor</p>
+                        <h2 className="text-4xl font-bold font-accent text-text-main">{t('title')}</h2>
+                        <p className="text-xl text-primary font-medium">{t('subtitle')}</p>
                     </div>
 
                     <div className="prose prose-lg text-text-sec">
                         <p>
-                            Mi enfoque combina la ciencia de la rehabilitación física con la sabiduría de la medicina tradicional china.
-                            Creo firmemente que cada paciente merece un tratamiento personalizado que no solo alivie los síntomas,
-                            sino que también aborde la raíz del desequilibrio.
+                            {t('p1')}
                         </p>
                         <p>
-                            Desde la comodidad de tu hogar o en mi consulta, mi objetivo es acompañarte en tu proceso de recuperación
-                            para que vuelvas a moverte con libertad y sin dolor.
+                            {t('p2')}
                         </p>
                     </div>
 
@@ -110,8 +110,8 @@ export function AboutSection() {
                                 <GraduationCap className="w-5 h-5" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-text-main">Formación</h4>
-                                <p className="text-sm text-text-sec">UCSC Concepción</p>
+                                <h4 className="font-bold text-text-main">{t('education')}</h4>
+                                <p className="text-sm text-text-sec">{t('educationVal')}</p>
                             </div>
                         </div>
 
@@ -120,8 +120,8 @@ export function AboutSection() {
                                 <Award className="w-5 h-5" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-text-main">Certificaciones</h4>
-                                <p className="text-sm text-text-sec">Acupuntura Clínica</p>
+                                <h4 className="font-bold text-text-main">{t('certification')}</h4>
+                                <p className="text-sm text-text-sec">{t('certificationVal')}</p>
                             </div>
                         </div>
 
@@ -130,8 +130,8 @@ export function AboutSection() {
                                 <MapPin className="w-5 h-5" />
                             </div>
                             <div>
-                                <h4 className="font-bold text-text-main">Cobertura</h4>
-                                <p className="text-sm text-text-sec">Gran Concepción</p>
+                                <h4 className="font-bold text-text-main">{t('coverage')}</h4>
+                                <p className="text-sm text-text-sec">{t('coverageVal')}</p>
                             </div>
                         </div>
                     </div>

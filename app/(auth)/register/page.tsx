@@ -1,18 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export default function RegisterPage() {
-    const router = useRouter();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
     });
-    const [error, setError] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +17,6 @@ export default function RegisterPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
 
         // Registration logic would typically call an API route (/api/auth/register)
         // For this MVP step, we will assume the user needs to contact admin or we mock it.
