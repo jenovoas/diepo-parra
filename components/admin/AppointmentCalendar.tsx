@@ -31,22 +31,22 @@ const AppointmentTooltip = ({ appointment, position }: { appointment: Appointmen
     if (!appointment) return null;
 
     const statusConfig = {
-        PENDING: "bg-yellow-100 text-yellow-800",
-        CONFIRMED: "bg-green-100 text-green-800",
-        COMPLETED: "bg-blue-100 text-blue-800",
-        CANCELLED: "bg-gray-100 text-gray-800",
+        PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        CONFIRMED: "bg-green-100 text-green-800 border-green-200",
+        COMPLETED: "bg-blue-100 text-blue-800 border-blue-200",
+        CANCELLED: "bg-gray-100 text-gray-800 border-gray-200",
     };
 
     return (
         <div
-            className="absolute z-10 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl w-64 text-sm"
+            className="absolute z-10 p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl w-72"
             style={{ left: position.x + 15, top: position.y + 15 }}
         >
-            <p className="font-bold text-text-main dark:text-white">{appointment.patient.fullName}</p>
-            <p className="text-text-sec dark:text-gray-400">{appointment.patient.phone}</p>
-            <p className="text-text-sec dark:text-gray-400">{appointment.serviceType}</p>
-            <p className="mt-2">
-                <span className={cn("px-2 py-1 text-xs font-bold rounded-full", statusConfig[appointment.status as keyof typeof statusConfig] || statusConfig.CANCELLED)}>
+            <p className="font-semibold text-base text-text-main dark:text-white mb-1">{appointment.patient.fullName}</p>
+            {appointment.patient.phone && <p className="text-sm text-text-sec dark:text-gray-400 mb-1">{appointment.patient.phone}</p>}
+            <p className="text-sm text-text-sec dark:text-gray-400 mb-2">{appointment.serviceType}</p>
+            <p>
+                <span className={cn("px-2 py-1 text-sm font-bold rounded-full border", statusConfig[appointment.status as keyof typeof statusConfig] || statusConfig.CANCELLED)}>
                     {appointment.status}
                 </span>
             </p>
@@ -172,21 +172,21 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                                         onDragStart={(e) => handleDragStart(e, apt.id)}
                                         onMouseEnter={() => setHoveredAppointment(apt)}
                                         onMouseLeave={() => setHoveredAppointment(null)}
-                                        className="group relative flex items-center gap-1 rounded bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 hover:border-primary/30 dark:hover:border-primary/30 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing px-2 py-1"
+                                        className="group relative flex items-center gap-1 rounded bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 hover:border-primary/30 dark:hover:border-primary/30 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing px-3 py-2"
                                     >
                                         <button
                                             onClick={() => setSelectedAppointment(apt)}
-                                            className="flex items-center gap-1 text-[10px] font-mono text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                                            className="flex items-center gap-1 text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
                                             title="Editar Hora/Estado"
                                         >
                                             {format(new Date(apt.date), "HH:mm")}
                                         </button>
 
-                                        <span className="text-gray-300 dark:text-gray-600 text-[10px] select-none">|</span>
+                                        <span className="text-gray-300 dark:text-gray-600 text-xs select-none">|</span>
 
                                         <Link
                                             href={`/dashboard/patients/${apt.patient.id}/edit`}
-                                            className="flex-1 text-[10px] truncate hover:text-primary dark:hover:text-primary hover:underline font-medium text-text-main dark:text-white"
+                                            className="flex-1 text-xs truncate hover:text-primary dark:hover:text-primary hover:underline font-medium text-text-main dark:text-white"
                                             title={`Ver Ficha de ${apt.patient.fullName}`}
                                             onClick={(e) => e.stopPropagation()}
                                         >
