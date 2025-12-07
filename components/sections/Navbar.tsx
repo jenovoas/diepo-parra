@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Link, usePathname } from "@/lib/navigation";
+import { useSession, signOut } from "next-auth/react";
 
-import { Menu, X, User, Activity, Eye } from "lucide-react";
+import { Menu, X, User, Activity, Eye, LogOut } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import gsap from "gsap";
 import { cn } from "@/lib/utils/cn";
@@ -22,6 +23,7 @@ export function Navbar() {
     const t = useTranslations('Navbar');
     const pathname = usePathname();
     const currentLocale = useLocale();
+    const { data: session } = useSession();
 
     // Determine the other locale to switch to
     const otherLocale = currentLocale === 'en' ? 'es' : 'en';
@@ -96,13 +98,34 @@ export function Navbar() {
                         </Link>
 
 
-                        <Link
-                            href="/dashboard"
-                            className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}
-                        >
-                            <User className="w-4 h-4" />
-                            Mi Cuenta
-                        </Link>
+                        {session ? (
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    href="/dashboard"
+                                    className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}
+                                >
+                                    <User className="w-4 h-4" />
+                                    Mi Cuenta
+                                </Link>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => signOut()}
+                                    title="Cerrar Sesión"
+                                    className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                                >
+                                    <LogOut className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        ) : (
+                            <Link
+                                href="/dashboard"
+                                className={cn(buttonVariants({ variant: "default", size: "sm" }), "gap-2 shadow-sm shadow-primary/20")}
+                            >
+                                <User className="w-4 h-4" />
+                                Acceder
+                            </Link>
+                        )}
                     </div>
                 </nav>
 
@@ -161,15 +184,39 @@ export function Navbar() {
                         </div>
                     </div>
 
-                    <div className="mt-8 w-full">
-                        <Link
-                            href="/dashboard"
-                            className={cn(buttonVariants({ variant: "default", size: "lg" }), "w-full gap-2 text-lg px-8 py-6")}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <User className="w-5 h-5" />
-                            Acceder / Registrarse
-                        </Link>
+                    <div className="mt-8 w-full space-y-4">
+                        {session ? (
+                            <>
+                                <Link
+                                    href="/dashboard"
+                                    className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full gap-2 text-lg px-8 py-6")}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <User className="w-5 h-5" />
+                                    Mi Cuenta
+                                </Link>
+                                <Button
+                                    variant="ghost"
+                                    className="w-full gap-2 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                    onClick={() => {
+                                        signOut();
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                    Cerrar Sesión
+                                </Button>
+                            </>
+                        ) : (
+                            <Link
+                                href="/dashboard"
+                                className={cn(buttonVariants({ variant: "default", size: "lg" }), "w-full gap-2 text-lg px-8 py-6")}
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <User className="w-5 h-5" />
+                                Acceder / Registrarse
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

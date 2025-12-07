@@ -7,6 +7,7 @@ import { CookieConsent } from "@/components/ui/CookieConsent";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AccessibilityWidget } from "@/components/ui/AccessibilityWidget";
 import { AccessibilityProvider } from "@/components/providers/AccessibilityContext";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -48,22 +49,24 @@ export default async function RootLayout({
         className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased font-sans`}
       >
         <NextIntlClientProvider messages={messages}>
-          <AccessibilityProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Navbar />
-              <main className="pt-20 min-h-screen">
-                {children}
-              </main>
-              <Footer />
-              <CookieConsent />
-              <AccessibilityWidget />
-            </ThemeProvider>
-          </AccessibilityProvider>
+          <AuthProvider>
+            <AccessibilityProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Navbar />
+                <main className="pt-20 min-h-screen">
+                  {children}
+                </main>
+                <Footer />
+                <CookieConsent />
+                <AccessibilityWidget />
+              </ThemeProvider>
+            </AccessibilityProvider>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

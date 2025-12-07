@@ -33,10 +33,18 @@ model Patient {
   fullName        String
   phone           String?
   birthDate       DateTime
+  occupation      String?
+  address         String?
   
   // Medical Data (Sensitive)
-  condition       String?
-  medicalHistory  String? // JSON or encrypted string
+  condition            String?
+  anamnesis            String?
+  surgicalHistory      String?
+  pathologicalHistory  String?
+  diagnosis            String?
+  treatmentPlan        String?
+  evolutionNotes       String? // Could be JSON or separate model later
+  riskIndex            String   @default("LOW") // LOW, MEDIUM, HIGH, CRITICAL
   
   // Privacy & Consent
   consentMedical  Boolean  @default(false)
