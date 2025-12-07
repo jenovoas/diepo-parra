@@ -37,13 +37,19 @@ export default async function DashboardPage() {
         const totalAppointments = await prisma.appointment.count();
 
         const appointments = await prisma.appointment.findMany({
-            include: {
+            select: {
+                id: true,
+                date: true,
+                serviceType: true,
+                status: true,
+                notes: true,
                 patient: {
                     select: {
+                        id: true,
                         fullName: true,
                         riskIndex: true,
-                    },
-                },
+                    }
+                }
             },
             orderBy: { date: 'asc' },
         });

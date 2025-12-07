@@ -24,7 +24,10 @@ interface Appointment {
     id: string;
     date: Date;
     serviceType: string;
+    status: string;
+    notes: string | null;
     patient: {
+        id: string;
         fullName: string;
         riskIndex: string;
     };

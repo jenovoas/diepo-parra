@@ -71,6 +71,19 @@ export function Navbar() {
                             {item.name}
                         </Link>
                     ))}
+
+                    {session && ['ADMIN', 'DOCTOR', 'ASSISTANT'].includes((session.user as any).role) && (
+                        <Link
+                            href="/dashboard"
+                            className={cn(
+                                "text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-full"
+                            )}
+                        >
+                            <Activity className="w-4 h-4" />
+                            Dashboard
+                        </Link>
+                    )}
+
                     <div className="flex items-center gap-4 border-l border-gray-200 dark:border-white/10 pl-4 ml-4">
                         {/* Accessibility Trigger */}
                         <Button
@@ -100,15 +113,6 @@ export function Navbar() {
 
                         {session ? (
                             <div className="flex items-center gap-2">
-                                {['ADMIN', 'DOCTOR', 'ASSISTANT'].includes((session.user as any).role) && (
-                                    <Link
-                                        href="/dashboard"
-                                        className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-2 text-primary font-bold")}
-                                    >
-                                        <Activity className="w-4 h-4" />
-                                        Dashboard
-                                    </Link>
-                                )}
                                 <Link
                                     href="/dashboard"
                                     className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}
