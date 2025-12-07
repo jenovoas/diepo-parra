@@ -208,8 +208,32 @@
                     "benefits": {
                         "0": "Comfort and time saving",
                         "1": "Care in a familiar environment",
-                        "2": "Ideal for reduced mobility",
                         "3": "No waiting times"
+                    }
+                },
+                "video_asesoria": {
+                    "title": "Sports Video Consultation",
+                    "desc": "Specialized remote care for athletes. Technical correction and injury prevention from your home.",
+                    "longDesc": "Telehealth service optimized for high-performance athletes. We perform sports gesture analysis, live technique correction, and training load adjustments to prevent injuries. Ideal for athletes looking to optimize performance or seeking an expert second opinion on musculoskeletal pain without interrupting their training.",
+                    "benefits": {
+                        "0": "Remote biomechanical analysis",
+                        "1": "Sports technique correction",
+                        "2": "Overload injury prevention",
+                        "3": "Performance optimization"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Flexible Platform",
+                            "desc": "Stable connection via Google Meet or Zoom according to your preference."
+                        },
+                        "2": {
+                            "title": "Visual Assessment",
+                            "desc": "Postural and movement analysis through HD camera."
+                        },
+                        "3": {
+                            "title": "Digital Plan",
+                            "desc": "Exercise and recommendation plan sent in PDF format post-session."
+                        }
                     }
                 }
             }

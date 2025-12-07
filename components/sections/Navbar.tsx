@@ -1,35 +1,36 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import { Link, usePathname } from "@/lib/navigation";
 
-import { Menu, X, User } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Menu, X, User, Activity, Eye } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import gsap from "gsap";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
+import { useTranslations, useLocale } from 'next-intl';
+import { useAccessibility } from "@/components/providers/AccessibilityContext";
+
 
 
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { toggleOpen, isOpen: isAccessibilityOpen } = useAccessibility();
     const menuRef = useRef<HTMLDivElement>(null);
     const linksRef = useRef<HTMLDivElement>(null);
     const t = useTranslations('Navbar');
     const pathname = usePathname();
-    // Simple way to switch language: replace /es with /en or vice-versa
-    // Note: This is a basic implementation. Ideally use next-intl's Link.
-    const currentLocale = pathname.split('/')[1] || 'es';
+    const currentLocale = useLocale();
+
+    // Determine the other locale to switch to
     const otherLocale = currentLocale === 'en' ? 'es' : 'en';
 
-    const navItems = [
-        { name: t('home'), href: `/${currentLocale}` },
-        { name: t('services'), href: `/${currentLocale}/#services` },
-        { name: t('about'), href: `/${currentLocale}/#about` },
-        { name: t('contact'), href: `/${currentLocale}/#contact` },
-        { name: t('emergency'), href: `/${currentLocale}/#emergency`, className: "text-red-500 font-bold" },
+    const navItems: { name: string; href: string; className?: string }[] = [
+        { name: t('home'), href: "/" },
+        { name: t('services'), href: "/#services" },
+        { name: t('about'), href: "/#about" },
+        { name: t('contact'), href: "/#contact" },
     ];
 
     // GSAP Animation for Mobile Menu
@@ -49,8 +50,9 @@ export function Navbar() {
         <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5 transition-all duration-300">
             <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                 {/* Logo */}
-                <Link href={`/${currentLocale}`} className="font-accent text-2xl font-bold text-primary">
-                    DIEGO PARRA | Kinesiología
+                <Link href="/" className="font-accent text-2xl font-bold text-primary flex items-center gap-2">
+                    <Activity className="w-8 h-8" strokeWidth={1.5} />
+                    <span>DIEGO PARRA | Kinesiología</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -68,20 +70,39 @@ export function Navbar() {
                         </Link>
                     ))}
                     <div className="flex items-center gap-4 border-l border-gray-200 dark:border-white/10 pl-4 ml-4">
+                        {/* Accessibility Trigger */}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleOpen}
+                            className={cn(
+                                "rounded-full hover:bg-primary/10 transition-colors",
+                                isAccessibilityOpen && "bg-primary/10 text-primary"
+                            )}
+                            title="Opciones de Accesibilidad"
+                        >
+                            <Eye className="w-5 h-5" />
+                        </Button>
+
                         <ThemeToggle />
 
                         {/* Language Switcher */}
                         <Link
-                            href={`/${otherLocale}${pathname.substring(3)}`}
+                            href={pathname}
+                            locale={otherLocale}
                             className="text-xs font-bold border border-primary/20 px-2 py-1 rounded hover:bg-primary/10 transition-colors uppercase"
                         >
                             {otherLocale}
                         </Link>
 
-                        <Button variant="outline" size="sm" className="gap-2">
+
+                        <Link
+                            href="/dashboard"
+                            className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}
+                        >
                             <User className="w-4 h-4" />
                             Mi Cuenta
-                        </Button>
+                        </Link>
                     </div>
                 </nav>
 
@@ -121,7 +142,8 @@ export function Navbar() {
 
                         <div className="text-xl font-bold uppercase flex gap-4">
                             <Link
-                                href={`/es${pathname.substring(3)}`}
+                                href={pathname}
+                                locale="es"
                                 onClick={() => setIsOpen(false)}
                                 className={currentLocale === 'es' ? 'text-primary' : 'text-text-sec'}
                             >
@@ -129,7 +151,8 @@ export function Navbar() {
                             </Link>
                             <span className="text-text-sec">/</span>
                             <Link
-                                href={`/en${pathname.substring(3)}`}
+                                href={pathname}
+                                locale="en"
                                 onClick={() => setIsOpen(false)}
                                 className={currentLocale === 'en' ? 'text-primary' : 'text-text-sec'}
                             >
@@ -139,10 +162,14 @@ export function Navbar() {
                     </div>
 
                     <div className="mt-8 w-full">
-                        <Button className="w-full gap-2 text-lg px-8 py-6" onClick={() => setIsOpen(false)}>
+                        <Link
+                            href="/dashboard"
+                            className={cn(buttonVariants({ variant: "default", size: "lg" }), "w-full gap-2 text-lg px-8 py-6")}
+                            onClick={() => setIsOpen(false)}
+                        >
                             <User className="w-5 h-5" />
                             Acceder / Registrarse
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

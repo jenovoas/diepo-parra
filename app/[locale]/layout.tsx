@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
+import { Outfit, Inter, Cormorant_Garamond } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AccessibilityWidget } from "@/components/ui/AccessibilityWidget";
+import { AccessibilityProvider } from "@/components/providers/AccessibilityContext";
 
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -44,23 +45,25 @@ export default async function RootLayout({
   return (
     <html lang={locale} className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} ${jakarta.variable} ${cormorant.variable} antialiased font-sans`}
+        className={`${outfit.variable} ${inter.variable} ${cormorant.variable} antialiased font-sans`}
       >
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <main className="pt-20 min-h-screen">
-              {children}
-            </main>
-            <Footer />
-            <CookieConsent />
-            <AccessibilityWidget />
-          </ThemeProvider>
+          <AccessibilityProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              <main className="pt-20 min-h-screen">
+                {children}
+              </main>
+              <Footer />
+              <CookieConsent />
+              <AccessibilityWidget />
+            </ThemeProvider>
+          </AccessibilityProvider>
         </NextIntlClientProvider>
       </body>
     </html>

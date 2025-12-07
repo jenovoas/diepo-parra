@@ -13,28 +13,42 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { fullName, phone, birthDate, condition, consentMedical, consentContact } = body;
+        const { fullName, phone, birthDate, condition, medicalHistory, consentMedical, consentContact } = body;
 
         // Validate required fields (basic validation)
         if (!fullName || !birthDate || !consentMedical) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        const patient = await prisma.patient.create({
-            data: {
+        const patient = await prisma.patient.upsert({
+            where: {
+                userId: session.user.id
+            },
+            update: {
+                fullName,
+                phone,
+                birthDate: new Date(birthDate),
+                condition,
+                medicalHistory,
+                // Only update consents if provided, otherwise keep existing
+                ...(consentMedical !== undefined && { consentMedical }),
+                ...(consentContact !== undefined && { consentContact })
+            },
+            create: {
                 userId: session.user.id,
                 fullName,
                 phone,
                 birthDate: new Date(birthDate),
                 condition,
-                consentMedical,
-                consentContact,
+                medicalHistory,
+                consentMedical: consentMedical || false,
+                consentContact: consentContact || false,
             },
         });
 
         return NextResponse.json(patient);
     } catch (error) {
-        console.error("Error creating patient:", error);
+        console.error("Error creating/updating patient:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

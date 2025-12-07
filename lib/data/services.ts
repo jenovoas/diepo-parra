@@ -6,6 +6,7 @@ import {
     Home,
     Brain,
     Wind,
+    Video,
 } from "lucide-react";
 
 export interface ServiceData {
@@ -21,6 +22,7 @@ export interface ServiceData {
     color: string;
     bgColor: string;
     featured?: boolean;
+    image: string;
 }
 
 export const services: ServiceData[] = [
@@ -36,6 +38,7 @@ export const services: ServiceData[] = [
         duration: "50 min",
         color: "text-teal-600",
         bgColor: "bg-teal-50",
+        image: "/images/slider-info-1.png",
     },
     {
         id: "acupuntura-dolor",
@@ -49,6 +52,7 @@ export const services: ServiceData[] = [
         duration: "45 min",
         color: "text-amber-600",
         bgColor: "bg-amber-50",
+        image: "/images/slider-info-2.png",
     },
     {
         id: "acupuntura-sm",
@@ -62,6 +66,7 @@ export const services: ServiceData[] = [
         duration: "45 min",
         color: "text-violet-600",
         bgColor: "bg-violet-50",
+        image: "/images/slider-info-3.png",
     },
     {
         id: "kine-respiratoria",
@@ -75,6 +80,7 @@ export const services: ServiceData[] = [
         duration: "40 min",
         color: "text-sky-600",
         bgColor: "bg-sky-50",
+        image: "/images/slider-info-1.png",
     },
     {
         id: "masaje",
@@ -88,8 +94,8 @@ export const services: ServiceData[] = [
         duration: "60 min",
         color: "text-rose-600",
         bgColor: "bg-rose-50",
+        image: "/images/slider-info-2.png",
     },
-
     {
         id: "kine-domicilio",
         slug: "kinesiologia-domicilio",
@@ -102,5 +108,21 @@ export const services: ServiceData[] = [
         duration: "Adicional",
         color: "text-indigo-600",
         bgColor: "bg-indigo-50",
+        image: "/images/slider-info-3.png",
+    },
+    {
+        id: "video_asesoria",
+        slug: "video-asesoria",
+        icon: Video,
+        title: "Video Asesoría (Telemedicina)",
+        description: "Consulta profesional remota vía Google Meet o Zoom. Ideal para orientaciones y seguimiento.",
+        longDescription: "Servicio de telemedicina diseñado para resolver dudas, realizar evaluaciones visuales, corrección de ejercicios y seguimiento de tratamientos a distancia. Conéctate desde cualquier lugar a través de Google Meet o Zoom y recibe la orientación profesional de un kinesiólogo experto sin salir de casa.",
+        benefits: ["Atención remota inmediata", "Sin tiempos de traslado", "Corrección de ejercicios en vivo", "Seguimiento continuo"],
+        price: "$35.000",
+        duration: "40 min",
+        color: "text-blue-600",
+        bgColor: "bg-blue-50",
+        featured: true,
+        image: "/images/slider-info-1.png",
     },
 ];

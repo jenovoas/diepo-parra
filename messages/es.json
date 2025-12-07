@@ -177,6 +177,20 @@
                         "1": "Mejora la calidad del sueño",
                         "2": "Equilibrio emocional",
                         "3": "Alivio de cefaleas tensionales"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Regulación Nerviosa",
+                            "desc": "Estímulo de puntos que modulan el sistema nervioso autónomo para inducir relajación profunda."
+                        },
+                        "2": {
+                            "title": "Equilibrio Energético",
+                            "desc": "Restablecimiento del flujo de Qi para armonizar mente y cuerpo según la MTC."
+                        },
+                        "3": {
+                            "title": "Ciclo de Sueño",
+                            "desc": "Tratamiento específico para combatir el insomnio y mejorar el descanso reparador."
+                        }
                     }
                 },
                 "kine_respiratoria": {
@@ -188,6 +202,24 @@
                         "1": "Mejora de la capacidad pulmonar",
                         "2": "Alivio de la dificultad respiratoria",
                         "3": "Educación en uso de inhaladores"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Higiene Bronquial",
+                            "desc": "Técnicas manuales para facilitar la eliminación de flemas y despejar la vía aérea."
+                        },
+                        "2": {
+                            "title": "Reeducación Ventilatoria",
+                            "desc": "Ejercicios para optimizar el patrón respiratorio y aumentar la capacidad pulmonar."
+                        },
+                        "3": {
+                            "title": "Monitoreo Constante",
+                            "desc": "Control de saturación de oxígeno y frecuencia respiratoria durante toda la sesión."
+                        },
+                        "4": {
+                            "title": "Educación Familiar",
+                            "desc": "Enseñanza de manejo de crisis y uso correcto de inhaloterapia en casa."
+                        }
                     }
                 },
                 "masaje": {
@@ -199,6 +231,20 @@
                         "1": "Reducción del estrés físico",
                         "2": "Mejora de la circulación sanguínea",
                         "3": "Aumento de la flexibilidad"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Liberación Miofascial",
+                            "desc": "Manipulación profunda del tejido conectivo para soltar restricciones y reducir rigidez."
+                        },
+                        "2": {
+                            "title": "Puntos Gatillo",
+                            "desc": "Presión específica en focos de dolor (nudos) para desactivar la tensión muscular referida."
+                        },
+                        "3": {
+                            "title": "Descarga Deportiva",
+                            "desc": "Masaje vigoroso ideal post-competencia para acelerar la recuperación muscular."
+                        }
                     }
                 },
                 "domicilio": {
@@ -210,6 +256,49 @@
                         "1": "Atención en entorno familiar",
                         "2": "Ideal para movilidad reducida",
                         "3": "Sin tiempos de espera"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Hospital en Casa",
+                            "desc": "Llevamos camilla, electroterapia y todo el equipamiento necesario a tu domicilio."
+                        },
+                        "2": {
+                            "title": "Evaluación del Entorno",
+                            "desc": "Asesoría para adaptar tu hogar y prevenir caídas o facilitar la movilidad diaria."
+                        },
+                        "3": {
+                            "title": "Atención Personalizada",
+                            "desc": "Tiempo exclusivo dedicado al paciente sin las distracciones de un box clínico compartido."
+                        },
+                        "4": {
+                            "title": "Apoyo al Cuidador",
+                            "desc": "Capacitación a familiares sobre movilizaciones seguras y cuidados básicos."
+                        }
+                    }
+                },
+                "video_asesoria": {
+                    "title": "Video Asesoría Deportiva",
+                    "desc": "Atención remota especializada para deportistas. Corrección técnica y prevención de lesiones desde tu hogar.",
+                    "longDesc": "Servicio de teleasistencia optimizado para atletas. Realizamos análisis de gesto deportivo, corrección de técnica en vivo y ajustes de carga de entrenamiento para prevenir lesiones. Ideal para deportistas que buscan optimizar su rendimiento o necesitan una segunda opinión experta sobre dolores musculoesqueléticos sin interrumpir sus entrenamientos.",
+                    "benefits": {
+                        "0": "Análisis biomecánico remoto",
+                        "1": "Corrección de técnica deportiva",
+                        "2": "Prevención de lesiones por sobrecarga",
+                        "3": "Optimización del rendimiento"
+                    },
+                    "features": {
+                        "1": {
+                            "title": "Plataforma Flexible",
+                            "desc": "Conexión estable vía Google Meet o Zoom según tu preferencia."
+                        },
+                        "2": {
+                            "title": "Evaluación Visual",
+                            "desc": "Análisis postural y de movimiento a través de cámara HD."
+                        },
+                        "3": {
+                            "title": "Pauta Digital",
+                            "desc": "Envío de ejercicios y recomendaciones en formato PDF post-sesión."
+                        }
                     }
                 }
             }

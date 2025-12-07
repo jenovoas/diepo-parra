@@ -1,10 +1,12 @@
 
+import { Link } from "@/lib/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { redirect } from "@/lib/navigation";
 import { prisma } from "@/lib/prisma";
 import { Calendar, Clock, FileText } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils/cn";
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -34,8 +36,18 @@ export default async function DashboardPage() {
                     <p className="text-text-sec">Bienvenido a tu portal de salud.</p>
                 </div>
                 <div className="flex gap-4">
-                    <Button variant="outline">Mi Perfil</Button>
-                    <Button>Nueva Reserva</Button>
+                    <Link
+                        href="/dashboard/profile"
+                        className={buttonVariants({ variant: "outline" })}
+                    >
+                        Mi Perfil
+                    </Link>
+                    <Link
+                        href="/#services"
+                        className={buttonVariants()}
+                    >
+                        Nueva Reserva
+                    </Link>
                 </div>
             </div>
 
@@ -67,39 +79,31 @@ export default async function DashboardPage() {
                     ) : (
                         <div className="bg-white p-8 rounded-xl border border-dashed border-gray-200 text-center py-12">
                             <p className="text-text-sec mb-4">No tienes citas agendadas próximamente.</p>
-                            <Button variant="ghost" className="text-primary hover:bg-primary/5">
+                            <Link
+                                href="/#services"
+                                className={cn(buttonVariants({ variant: "ghost" }), "text-primary hover:bg-primary/5")}
+                            >
                                 Agendar Hora
-                            </Button>
+                            </Link>
                         </div>
                     )}
                 </div>
 
                 {/* Quick Actions / Status */}
                 <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h3 className="font-bold text-lg text-text-main mb-4 flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-secondary" /> Mis Documentos
-                        </h3>
-                        <ul className="space-y-3 text-sm text-text-sec">
-                            <li className="flex items-center gap-2 hover:text-primary cursor-pointer">
-                                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                                Evaluación Inicial
-                            </li>
-                            <li className="flex items-center gap-2 hover:text-primary cursor-pointer">
-                                <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-                                Plan de Ejercicios (Pendiente)
-                            </li>
-                        </ul>
-                    </div>
+                    {/* ... (docs) ... */}
 
                     <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
                         <h3 className="font-bold text-lg text-primary mb-2">¿Necesitas Ayuda?</h3>
                         <p className="text-sm text-text-sec mb-4">
                             Contáctanos directamente si tienes dudas sobre tu tratamiento.
                         </p>
-                        <Button variant="outline" className="w-full bg-white hover:bg-white/80">
+                        <Link
+                            href="/#contact"
+                            className={cn(buttonVariants({ variant: "outline" }), "w-full bg-white hover:bg-white/80")}
+                        >
                             Contactar Soporte
-                        </Button>
+                        </Link>
                     </div>
                 </div>
 

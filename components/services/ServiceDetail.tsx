@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Link } from "@/lib/navigation";
+import { Button, buttonVariants } from "@/components/ui/Button";
+import { cn } from "@/lib/utils/cn";
 import { CheckCircle2, ArrowLeft, Calendar, CreditCard } from "lucide-react";
 
 export interface ServiceDetailProps {
@@ -142,11 +143,12 @@ export function ServiceDetail({
                                 </div>
 
                                 <div className="space-y-4">
-                                    <Link href="/#contact" className="block">
-                                        <Button className="w-full text-lg py-6 shadow-lg shadow-primary/20 group">
-                                            <Calendar className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                            Agendar Hora
-                                        </Button>
+                                    <Link
+                                        href="/#contact"
+                                        className={cn(buttonVariants(), "w-full text-lg py-6 shadow-lg shadow-primary/20 group")}
+                                    >
+                                        <Calendar className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                                        Agendar Hora
                                     </Link>
                                     <p className="text-xs text-center text-muted-foreground">
                                         * Reembolsable con Isapres según tu plan.
@@ -156,11 +158,12 @@ export function ServiceDetail({
                                     {/* Using props.id if available, otherwise hidden */}
                                     {props.id && (
                                         <div className="pt-4 border-t border-border/50">
-                                            <Link href={`/checkout?serviceId=${props.id}`} className="block">
-                                                <Button variant="outline" className="w-full text-lg py-6 border-primary/20 hover:bg-primary/5 group">
-                                                    <CreditCard className="w-5 h-5 mr-3 text-primary group-hover:scale-110 transition-transform" />
-                                                    Pagar Online
-                                                </Button>
+                                            <Link
+                                                href={`/checkout?serviceId=${props.id}`}
+                                                className={cn(buttonVariants({ variant: "outline" }), "w-full text-lg py-6 border-primary/20 hover:bg-primary/5 group")}
+                                            >
+                                                <CreditCard className="w-5 h-5 mr-3 text-primary group-hover:scale-110 transition-transform" />
+                                                Pagar Online
                                             </Link>
                                             <div className="flex justify-center gap-2 mt-2 opacity-60 grayscale hover:grayscale-0 transition-all">
                                                 <Image src="/images/mp-logo.png" alt="MercadoPago" width={60} height={15} className="h-4 w-auto object-contain" />
