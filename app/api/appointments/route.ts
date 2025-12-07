@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { date, serviceType, notes, patientId } = body;
+        const { date, serviceType, notes, patientId, doctorId } = body;
 
         // Basic Validation
         if (!date || !serviceType || !patientId) {
@@ -54,6 +54,7 @@ export async function POST(req: Request) {
                 serviceType,
                 notes,
                 patientId,
+                doctorId: doctorId || null, // Optional, but good to have
                 status: "PENDING"
             },
         });

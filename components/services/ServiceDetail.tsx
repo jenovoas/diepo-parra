@@ -4,6 +4,7 @@ import { Link } from "@/lib/navigation";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { CheckCircle2, ArrowLeft, Calendar, CreditCard } from "lucide-react";
+import { BookingModal } from "@/components/booking/BookingModal";
 
 export interface ServiceDetailProps {
     title: string;
@@ -143,13 +144,14 @@ export function ServiceDetail({
                                 </div>
 
                                 <div className="space-y-4">
-                                    <Link
-                                        href="/#contact"
-                                        className={cn(buttonVariants(), "w-full text-lg py-6 shadow-lg shadow-primary/20 group")}
-                                    >
-                                        <Calendar className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                                        Agendar Hora
-                                    </Link>
+                                    <BookingModal serviceId={props.id || "general-booking"} serviceName={title} duration={duration} price={price}>
+                                        <button
+                                            className={cn(buttonVariants(), "w-full text-lg py-6 shadow-lg shadow-primary/20 group")}
+                                        >
+                                            <Calendar className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                                            Agendar Hora
+                                        </button>
+                                    </BookingModal>
                                     <p className="text-xs text-center text-muted-foreground">
                                         * Reembolsable con Isapres según tu plan.
                                     </p>

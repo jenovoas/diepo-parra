@@ -1,17 +1,24 @@
 "use client";
-
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "@/lib/navigation";
-import { Calendar, Clock, FileText } from "lucide-react";
-import { buttonVariants } from "@/components/ui/Button";
+import { Calendar, Plus } from "lucide-react";
+import { buttonVariants, Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { Session } from "next-auth";
+import { AppointmentCard } from "./AppointmentCard";
+import { BookingModal } from "@/components/booking/BookingModal";
+import { useRouter } from "next/navigation";
 
+// ... interfaces ... (same as before or imported)
 interface Appointment {
     id: string;
     date: Date;
     serviceType: string;
     status: string;
+    doctor?: {
+        name: string | null;
+        image: string | null;
+    } | null;
 }
 
 interface PatientData {
@@ -24,6 +31,29 @@ interface PatientDashboardProps {
 }
 
 export function PatientDashboard({ session, patient }: PatientDashboardProps) {
+    const router = useRouter();
+    // We need to manage state locally for optimistic updates on cancel?
+    // Or just rely on router.refresh() inside the card? 
+    // The card calls `router.refresh()` on success.
+    // However, for immediate UI feedback, passing a state updater or just re-rendering via refresh is key.
+    // Since this is a server component child (wait, PatientDashboard is "use client"), router.refresh() works well.
+
+    const [optimisticAppointments, setOptimisticAppointments] = useState<Appointment[]>(patient?.appointments || []);
+
+    // Sync with props when they change (e.g. after refresh)
+    React.useEffect(() => {
+        if (patient?.appointments) {
+            setOptimisticAppointments(patient.appointments);
+        }
+    }, [patient]);
+
+    const handleCancel = (id: string) => {
+        // Optimistic update
+        setOptimisticAppointments(prev => prev.map(apt =>
+            apt.id === id ? { ...apt, status: 'CANCELLED' } : apt
+        ));
+    };
+
     return (
         <div className="container mx-auto px-6 py-12">
             <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
@@ -40,12 +70,13 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                     >
                         Mi Perfil
                     </Link>
-                    <Link
-                        href="/#services"
-                        className={buttonVariants()}
-                    >
-                        Nueva Reserva
-                    </Link>
+
+                    <BookingModal serviceId="general" serviceName="Consulta General">
+                        <div className={cn(buttonVariants(), "gap-2 cursor-pointer")}>
+                            <Plus className="w-5 h-5" />
+                            Nueva Reserva
+                        </div>
+                    </BookingModal>
                 </div>
             </div>
 
@@ -57,48 +88,52 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                         <Calendar className="w-5 h-5 text-primary" /> Próximas Citas
                     </h2>
 
-                    {patient?.appointments && patient.appointments.length > 0 ? (
+                    {optimisticAppointments.length > 0 ? (
                         <div className="grid gap-4">
-                            {patient.appointments.map((apt) => (
-                                <div key={apt.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-                                    <div>
-                                        <h3 className="font-bold text-lg text-primary">{apt.serviceType}</h3>
-                                        <p className="text-sm text-text-sec flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {new Date(apt.date).toLocaleDateString()} - {new Date(apt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </p>
-                                    </div>
-                                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">
-                                        {apt.status}
-                                    </span>
-                                </div>
+                            {optimisticAppointments.map((apt) => (
+                                <AppointmentCard
+                                    key={apt.id}
+                                    appointment={apt}
+                                    onCancel={handleCancel}
+                                />
                             ))}
                         </div>
                     ) : (
                         <div className="bg-white p-8 rounded-xl border border-dashed border-gray-200 text-center py-12">
                             <p className="text-text-sec mb-4">No tienes citas agendadas próximamente.</p>
-                            <Link
-                                href="/#services"
-                                className={cn(buttonVariants({ variant: "ghost" }), "text-primary hover:bg-primary/5")}
-                            >
-                                Agendar Hora
-                            </Link>
+
+                            <BookingModal serviceId="general" serviceName="Consulta General">
+                                <Button variant="ghost" className="text-primary hover:bg-primary/5">
+                                    Agendar Hora
+                                </Button>
+                            </BookingModal>
                         </div>
                     )}
                 </div>
 
-                {/* Quick Actions / Status */}
+                {/* Status / Quick Actions */}
                 <div className="space-y-6">
-                    {/* ... (docs) ... */}
+                    <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl border border-primary/10">
+                        <h3 className="font-bold text-lg text-primary mb-2">Reserva Rápida</h3>
+                        <p className="text-sm text-text-sec mb-4">
+                            Agenda tu próxima sesión de kinesiología o acupuntura en pocos pasos.
+                        </p>
 
-                    <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
-                        <h3 className="font-bold text-lg text-primary mb-2">¿Necesitas Ayuda?</h3>
+                        <BookingModal serviceId="quick" serviceName="Tratamiento">
+                            <Button className="w-full shadow-lg shadow-primary/20">
+                                Agendar Ahora
+                            </Button>
+                        </BookingModal>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-xl border border-gray-100">
+                        <h3 className="font-bold text-lg text-gray-800 mb-2">¿Necesitas Ayuda?</h3>
                         <p className="text-sm text-text-sec mb-4">
                             Contáctanos directamente si tienes dudas sobre tu tratamiento.
                         </p>
                         <Link
                             href="/#contact"
-                            className={cn(buttonVariants({ variant: "outline" }), "w-full bg-white hover:bg-white/80")}
+                            className={cn(buttonVariants({ variant: "outline" }), "w-full hover:bg-gray-50")}
                         >
                             Contactar Soporte
                         </Link>

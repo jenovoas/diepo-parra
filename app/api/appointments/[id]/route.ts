@@ -55,18 +55,45 @@ export async function DELETE(
     const params = await props.params;
     const session = await getServerSession(authOptions);
 
-    if (!session || session.user.role !== 'ADMIN') {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!session || !session.user?.email) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
         const { id } = params;
-        await prisma.appointment.delete({
-            where: { id }
+
+        // Verify appointment exists
+        const appointment = await prisma.appointment.findUnique({
+            where: { id },
+            include: { patient: true }
         });
 
-        return NextResponse.json({ success: true });
+        if (!appointment) {
+            return NextResponse.json({ error: "Not found" }, { status: 404 });
+        }
+
+        // Authorization Logic
+        const isAdmin = session.user.role === 'ADMIN';
+        const isOwner = appointment.patient.userId === session.user.id;
+
+        if (!isAdmin && !isOwner) {
+            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        }
+
+        // Update status to CANCELLED (Soft Delete)
+        // If ADMIN, we could support hard delete via query param? 
+        // For simplicity and safety, let's defaults to Soft Cancel for everyone here.
+        // Or if strictly DELETE verb, maybe hard delete for ADMIN?
+        // Let's stick to Soft Cancel as "Cancellation" is the feature requested.
+
+        const updated = await prisma.appointment.update({
+            where: { id },
+            data: { status: "CANCELLED" }
+        });
+
+        return NextResponse.json(updated);
     } catch (error) {
+        console.error("Delete error:", error);
         return NextResponse.json({ error: "Internal Error" }, { status: 500 });
     }
 }
