@@ -28,6 +28,17 @@ export async function updateAppointment(id: string, formData: FormData) {
     revalidatePath("/dashboard");
 }
 
+export async function moveAppointment(id: string, newDate: Date) {
+    await prisma.appointment.update({
+        where: { id },
+        data: {
+            date: newDate,
+        },
+    });
+
+    revalidatePath("/dashboard");
+}
+
 export async function deleteAppointment(id: string) {
     await prisma.appointment.delete({
         where: { id },

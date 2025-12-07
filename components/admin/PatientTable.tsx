@@ -73,7 +73,12 @@ export function PatientTable({ patients }: PatientTableProps) {
                                     return (
                                         <tr key={patient.id} className="hover:bg-gray-50/50 transition-colors">
                                             <td className="px-6 py-4 font-medium text-text-main">
-                                                {patient.fullName}
+                                                <Link
+                                                    href={`/dashboard/patients/${patient.id}/edit`}
+                                                    className="hover:text-primary hover:underline transition-colors"
+                                                >
+                                                    {patient.fullName}
+                                                </Link>
                                             </td>
                                             <td className="px-6 py-4 text-text-sec">
                                                 <div className="flex flex-col">
