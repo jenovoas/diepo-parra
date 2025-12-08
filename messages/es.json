@@ -2,8 +2,8 @@
     "Navbar": {
         "home": "Inicio",
         "services": "Servicios",
-        "about": "Sobre Mí",
-        "contact": "Contacto",
+        "about-start": "Sobre",
+        "about-end": " Mí",
         "contact": "Contacto",
         "emergency": "Emergencias",
         "login": "Acceder",

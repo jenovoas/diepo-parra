@@ -9,11 +9,14 @@ import { Button, buttonVariants } from "@/components/ui/Button";
 import gsap from "gsap";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { useTranslations, useLocale } from 'next-intl';
 import { useAccessibility } from "@/components/providers/AccessibilityContext";
 
 
 
+
+import { ClientOnly } from "@/components/ui/ClientOnly";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,34 +31,38 @@ export function Navbar() {
     // Determine the other locale to switch to
     const otherLocale = currentLocale === 'en' ? 'es' : 'en';
 
-    const navItems: { name: string; href: string; className?: string }[] = [
+    const navItems: { name: React.ReactNode; href: string; className?: string }[] = [
         { name: t('home'), href: "/" },
         { name: t('services'), href: "/#services" },
-        { name: t('about'), href: "/#about" },
+        { name: <>{t('about-start')}<span className="hidden sm:inline">{t('about-end')}</span></>, href: "/#about" },
         { name: t('contact'), href: "/#contact" },
     ];
 
     // GSAP Animation for Mobile Menu
     useEffect(() => {
+        const menuHeight = menuRef.current?.scrollHeight; // Get the natural height of the content
+
         if (isOpen) {
-            gsap.to(menuRef.current, { x: 0, duration: 0.5, ease: "power3.out" });
+            gsap.to(menuRef.current, { maxHeight: menuHeight, duration: 0.5, ease: "power3.out" });
             gsap.fromTo(linksRef.current?.children || [],
                 { y: 50, opacity: 0 },
                 { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, delay: 0.2 }
             );
         } else {
-            gsap.to(menuRef.current, { x: "100%", duration: 0.5, ease: "power3.in" });
+            gsap.to(menuRef.current, { maxHeight: 0, duration: 0.5, ease: "power3.in" });
         }
     }, [isOpen]);
 
     return (
-        <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5 transition-all duration-300">
+        <header className="fixed top-0 w-full z-50 bg-surface backdrop-blur-md border-b border-secondary dark:border-white/5 transition-all duration-300">
             <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="font-accent text-lg md:text-xl lg:text-2xl font-bold text-primary flex items-center gap-2 whitespace-nowrap">
+                <Link href="/" className="font-accent text-lg md:text-xl lg:text-2xl font-bold text-primary flex items-center gap-2">
                     <Activity className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1.5} />
-                    <span>DIEGO PARRA | Kinesiología</span>
-                </Link>
+                    <ClientOnly>
+                      <span className="hidden sm:inline">DIEGO PARRA | Kinesiología</span>
+                      <span className="sm:hidden">D.P. | Kinesiología</span>
+                    </ClientOnly>                </Link>
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex items-center gap-4 lg:gap-8">
@@ -101,14 +108,7 @@ export function Navbar() {
 
                         <ThemeToggle />
 
-                        {/* Language Switcher */}
-                        <Link
-                            href={pathname}
-                            locale={otherLocale}
-                            className="text-xs font-bold border border-primary/20 px-2 py-1 rounded hover:bg-primary/10 transition-colors uppercase"
-                        >
-                            {otherLocale}
-                        </Link>
+                        <LanguageSwitcher />
 
 
                         {session ? (
@@ -144,7 +144,7 @@ export function Navbar() {
 
                 {/* Mobile Toggle */}
                 <button
-                    className="md:hidden text-text-main p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors"
+                    className="md:hidden text-text-main p-2 hover:bg-secondary dark:hover:bg-white/10 rounded-full transition-colors"
                     onClick={() => setIsOpen(!isOpen)}
                     aria-label="Toggle menu"
                 >
@@ -155,8 +155,7 @@ export function Navbar() {
             {/* Mobile Menu Overlay */}
             <div
                 ref={menuRef}
-                className="fixed inset-0 top-20 bg-surface z-40 translate-x-full md:hidden flex flex-col p-8 shadow-inner border-t border-gray-100 dark:border-white/5"
-                style={{ height: "calc(100vh - 80px)" }}
+                className="absolute top-full left-0 right-0 bg-surface z-40 md:hidden flex flex-col p-8 shadow-inner border-t border-gray-100 dark:border-white/5 max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
             >
                 <div ref={linksRef} className="flex flex-col gap-6 items-center justify-center flex-1">
                     {navItems.map((item) => (
@@ -176,25 +175,7 @@ export function Navbar() {
                     <div className="flex gap-6 items-center mt-8 pt-8 border-t border-gray-200 dark:border-white/10 w-full justify-center">
                         <ThemeToggle />
 
-                        <div className="text-xl font-bold uppercase flex gap-4">
-                            <Link
-                                href={pathname}
-                                locale="es"
-                                onClick={() => setIsOpen(false)}
-                                className={currentLocale === 'es' ? 'text-primary' : 'text-text-sec'}
-                            >
-                                ES
-                            </Link>
-                            <span className="text-text-sec">/</span>
-                            <Link
-                                href={pathname}
-                                locale="en"
-                                onClick={() => setIsOpen(false)}
-                                className={currentLocale === 'en' ? 'text-primary' : 'text-text-sec'}
-                            >
-                                EN
-                            </Link>
-                        </div>
+                        <LanguageSwitcher />
                     </div>
 
                     <div className="mt-8 w-full space-y-4">

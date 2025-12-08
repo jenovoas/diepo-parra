@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Phone, Mail, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { ClientOnly } from "@/components/ui/ClientOnly";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { useTranslations } from 'next-intl';
 
@@ -20,6 +22,36 @@ export function ContactSection() {
     const t = useTranslations('Contact');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+    const containerRef = useRef<HTMLElement>(null);
+    const leftColRef = useRef<HTMLDivElement>(null);
+    const rightColRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        const ctx = gsap.context(() => {
+            gsap.from(leftColRef.current, {
+                scrollTrigger: {
+                    trigger: leftColRef.current,
+                    start: "top 80%",
+                },
+                x: -50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+            gsap.from(rightColRef.current, {
+                scrollTrigger: {
+                    trigger: rightColRef.current,
+                    start: "top 80%",
+                },
+                x: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        }, containerRef);
+        return () => ctx.revert();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,12 +83,12 @@ export function ContactSection() {
     };
 
     return (
-        <section id="contact" className="py-24 px-6 bg-secondary/30">
+        <section ref={containerRef} id="contact" className="py-24 px-6 bg-secondary/30">
             <div className="container mx-auto max-w-6xl">
                 <div className="grid lg:grid-cols-2 gap-16">
 
                     {/* Left Column: Contact Info */}
-                    <div className="space-y-8">
+                    <div ref={leftColRef} className="space-y-8">
                         <div>
                             <h2 className="text-4xl font-bold font-accent text-text-main mb-4">{t('title')}</h2>
                             <p className="text-lg text-text-sec">
@@ -105,7 +137,7 @@ export function ContactSection() {
                     </div>
 
                     {/* Right Column: Reservation Form */}
-                    <div className="bg-surface p-8 rounded-3xl shadow-xl shadow-primary/5 border border-primary/10 dark:border-white/5">
+                    <div ref={rightColRef} className="bg-surface p-8 rounded-3xl shadow-xl shadow-primary/5 border border-primary/10 dark:border-white/5">
                         <h3 className="text-2xl font-bold font-accent text-text-main mb-6">{t('formTitle')}</h3>
 
                         <form onSubmit={handleSubmit} className="space-y-5">

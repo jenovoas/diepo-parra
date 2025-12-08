@@ -50,8 +50,8 @@ export function ServicesSection() {
             ScrollTrigger.batch(".service-card", {
                 onEnter: (batch) => {
                     gsap.fromTo(batch,
-                        { y: 30, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power3.out", overwrite: true }
+                        { y: 30, opacity: 0, rotation: -5 },
+                        { y: 0, opacity: 1, rotation: 0, duration: 0.5, stagger: 0.1, ease: "power3.out", overwrite: true }
                     );
                 },
                 start: "top 85%",
@@ -82,7 +82,7 @@ export function ServicesSection() {
                                 key={idx}
                                 className={cn(
                                     "service-card group relative p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer",
-                                    "bg-surface border-gray-100 dark:border-white/5 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/20",
+                                    "bg-surface border-secondary dark:border-white/5 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/20",
                                     service.featured && "border-primary/30 ring-1 ring-primary/30 shadow-lg shadow-primary/10"
                                 )}
                             >
@@ -102,7 +102,7 @@ export function ServicesSection() {
                                     {desc}
                                 </p>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-gray-50">
+                                <div className="flex items-center justify-between pt-6 border-t border-secondary">
                                     <div className="flex flex-col">
                                         <span className="text-2xl font-bold text-primary">{service.price}</span>
                                         <div className="flex items-center text-xs text-text-sec mt-1">

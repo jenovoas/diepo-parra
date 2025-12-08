@@ -60,41 +60,47 @@ export function AdminDashboard({ session, patients, appointments = [], stats }: 
             {/* Stats Cards */}
             <ClientOnly>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <Link href="/admin/analytics/patients" className="group">
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-700 transition-all cursor-pointer">
-                            <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
-                                <Users className="w-6 h-6" />
+                    {['ADMIN', 'DOCTOR'].includes(session.user.role) && (
+                        <Link href="/admin/analytics/patients" className="group">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-700 transition-all cursor-pointer">
+                                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
+                                    <Users className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-text-sec dark:text-gray-400">Total Pacientes</p>
+                                    <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.totalPatients}</h3>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-text-sec dark:text-gray-400">Total Pacientes</p>
-                                <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.totalPatients}</h3>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    )}
 
-                    <Link href="/admin/analytics/appointments" className="group">
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-amber-200 dark:hover:border-amber-700 transition-all cursor-pointer">
-                            <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg group-hover:bg-amber-100 dark:group-hover:bg-amber-900/50 transition-colors">
-                                <Calendar className="w-6 h-6" />
+                    {['ADMIN', 'DOCTOR', 'ASSISTANT'].includes(session.user.role) && (
+                        <Link href="/admin/analytics/appointments" className="group">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-amber-200 dark:hover:border-amber-700 transition-all cursor-pointer">
+                                <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg group-hover:bg-amber-100 dark:group-hover:bg-amber-900/50 transition-colors">
+                                    <Calendar className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-text-sec dark:text-gray-400">Citas Pendientes</p>
+                                    <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.pendingAppointments}</h3>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-text-sec dark:text-gray-400">Citas Pendientes</p>
-                                <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.pendingAppointments}</h3>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    )}
 
-                    <Link href="/admin/analytics/revenue" className="group">
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-teal-200 dark:hover:border-teal-700 transition-all cursor-pointer">
-                            <div className="p-3 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-lg group-hover:bg-teal-100 dark:group-hover:bg-teal-900/50 transition-colors">
-                                <Activity className="w-6 h-6" />
+                    {session.user.role === 'ADMIN' && (
+                        <Link href="/admin/analytics/revenue" className="group">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-md hover:border-teal-200 dark:hover:border-teal-700 transition-all cursor-pointer">
+                                <div className="p-3 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-lg group-hover:bg-teal-100 dark:group-hover:bg-teal-900/50 transition-colors">
+                                    <Activity className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-text-sec dark:text-gray-400">Citas Totales</p>
+                                    <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.totalAppointments}</h3>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-text-sec dark:text-gray-400">Citas Totales</p>
-                                <h3 className="text-2xl font-bold text-text-main dark:text-white">{stats.totalAppointments}</h3>
-                            </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    )}
                 </div>
             </ClientOnly>
 
@@ -105,9 +111,11 @@ export function AdminDashboard({ session, patients, appointments = [], stats }: 
             </div>
 
             {/* Patients Table */}
-            <div className="mb-12">
-                <PatientTable patients={patients} />
-            </div>
+            {['ADMIN', 'DOCTOR'].includes(session.user.role) && (
+                <div className="mb-12">
+                    <PatientTable patients={patients} />
+                </div>
+            )}
         </div>
     );
 }
