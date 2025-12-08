@@ -138,7 +138,7 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-7 bg-gray-100 dark:bg-gray-900 gap-[1px]">
+                <div className="grid grid-cols-7 bg-gray-200 dark:bg-gray-900 gap-[1px]">
                     {calendarDays.map((day, dayIdx) => {
                         const dayAppointments = appointments.filter(apt => isSameDay(new Date(apt.date), day));
                         const isDayWeekend = isWeekend(day);
@@ -176,7 +176,7 @@ export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) 
                                         onDragStart={(e) => handleDragStart(e, apt.id)}
                                         onMouseEnter={() => setHoveredAppointment(apt)}
                                         onMouseLeave={() => setHoveredAppointment(null)}
-                                        className="group relative flex items-center gap-1 rounded bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 hover:border-primary/30 dark:hover:border-primary/30 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing px-3 py-2"
+                                        className="group relative flex items-center gap-1 rounded bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-primary/30 dark:hover:border-primary/30 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all cursor-grab active:cursor-grabbing px-3 py-2"
                                     >
                                         <button
                                             onClick={() => setSelectedAppointment(apt)}
