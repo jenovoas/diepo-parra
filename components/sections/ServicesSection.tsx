@@ -46,16 +46,7 @@ export function ServicesSection() {
                 ease: "power3.out"
             });
 
-            // Animate service cards with batching for better performance and reliability
-            ScrollTrigger.batch(".service-card", {
-                onEnter: (batch) => {
-                    gsap.fromTo(batch,
-                        { y: 30, opacity: 0, rotation: -5 },
-                        { y: 0, opacity: 1, rotation: 0, duration: 0.5, stagger: 0.1, ease: "power3.out", overwrite: true }
-                    );
-                },
-                start: "top 85%",
-            });
+
 
         }, containerRef);
 

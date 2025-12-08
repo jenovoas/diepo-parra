@@ -54,7 +54,7 @@ export function Navbar() {
     }, [isOpen]);
 
     return (
-        <header className="fixed top-0 w-full z-50 bg-surface backdrop-blur-md border-b border-secondary dark:border-white/5 transition-all duration-300">
+        <header className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md transition-all duration-300">
             <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="font-accent text-lg md:text-xl lg:text-2xl font-bold text-primary flex items-center gap-2">
@@ -71,7 +71,7 @@ export function Navbar() {
                             key={item.name}
                             href={item.href}
                             className={cn(
-                                "text-sm font-medium text-text-main hover:text-primary transition-colors",
+                                "text-sm font-medium text-text-main hover:text-primary transition-colors px-3 py-1.5 rounded-md hover:bg-primary/10",
                                 item.className
                             )}
                         >

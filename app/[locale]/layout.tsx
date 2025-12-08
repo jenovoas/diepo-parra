@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AccessibilityWidget } from "@/components/ui/AccessibilityWidget";
 import { AccessibilityProvider } from "@/components/providers/AccessibilityContext";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import AnimatedBackground from "@/components/sections/AnimatedBackground";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -58,8 +59,9 @@ export default async function RootLayout({
                 storageKey="theme-preference"
                 disableTransitionOnChange
               >
+                <AnimatedBackground />
                 <Navbar />
-                <main className="pt-20 min-h-screen">
+                <main className="min-h-screen">
                   {children}
                 </main>
                 <Footer />
