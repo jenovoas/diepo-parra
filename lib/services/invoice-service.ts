@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { calculateInvoiceTotals } from './tax-calculator';
+import { calculateInvoiceTotals } from '@/lib/utils/tax-calculator';
 
 /**
  * Invoice Service
@@ -117,6 +117,7 @@ export async function getInvoice(id: string) {
             patient: {
                 select: {
                     id: true,
+                    userId: true,
                     fullName: true,
                     phone: true,
                     user: {
@@ -279,70 +280,72 @@ export async function registerPayment(
         return updatedInvoice;
     }
 
-    /**
-     * Cancel invoice
-     */
-    export async function cancelInvoice(id: string, reason?: string) {
-        return await prisma.invoice.update({
-            where: { id },
-            data: {
-                paymentStatus: 'CANCELLED',
-                notes: reason ? `CANCELADA: ${reason}` : 'CANCELADA',
-            },
-        });
+}
+
+/**
+ * Cancel invoice
+ */
+export async function cancelInvoice(id: string, reason?: string) {
+    return await prisma.invoice.update({
+        where: { id },
+        data: {
+            paymentStatus: 'CANCELLED',
+            notes: reason ? `CANCELADA: ${reason}` : 'CANCELADA',
+        },
+    });
+}
+
+/**
+ * Get invoice statistics
+ */
+export async function getInvoiceStats(startDate?: Date, endDate?: Date) {
+    const where: any = {};
+
+    if (startDate || endDate) {
+        where.issuedAt = {};
+        if (startDate) where.issuedAt.gte = startDate;
+        if (endDate) where.issuedAt.lte = endDate;
     }
 
-    /**
-     * Get invoice statistics
-     */
-    export async function getInvoiceStats(startDate?: Date, endDate?: Date) {
-        const where: any = {};
+    const [total, pending, paid, overdue] = await Promise.all([
+        prisma.invoice.aggregate({
+            where,
+            _sum: { total: true },
+            _count: true,
+        }),
+        prisma.invoice.aggregate({
+            where: { ...where, paymentStatus: 'PENDING' },
+            _sum: { total: true },
+            _count: true,
+        }),
+        prisma.invoice.aggregate({
+            where: { ...where, paymentStatus: 'PAID' },
+            _sum: { total: true },
+            _count: true,
+        }),
+        prisma.invoice.aggregate({
+            where: { ...where, paymentStatus: 'OVERDUE' },
+            _sum: { total: true },
+            _count: true,
+        }),
+    ]);
 
-        if (startDate || endDate) {
-            where.issuedAt = {};
-            if (startDate) where.issuedAt.gte = startDate;
-            if (endDate) where.issuedAt.lte = endDate;
-        }
-
-        const [total, pending, paid, overdue] = await Promise.all([
-            prisma.invoice.aggregate({
-                where,
-                _sum: { total: true },
-                _count: true,
-            }),
-            prisma.invoice.aggregate({
-                where: { ...where, paymentStatus: 'PENDING' },
-                _sum: { total: true },
-                _count: true,
-            }),
-            prisma.invoice.aggregate({
-                where: { ...where, paymentStatus: 'PAID' },
-                _sum: { total: true },
-                _count: true,
-            }),
-            prisma.invoice.aggregate({
-                where: { ...where, paymentStatus: 'OVERDUE' },
-                _sum: { total: true },
-                _count: true,
-            }),
-        ]);
-
-        return {
-            total: {
-                count: total._count,
-                amount: total._sum.total || 0,
-            },
-            pending: {
-                count: pending._count,
-                amount: pending._sum.total || 0,
-            },
-            paid: {
-                count: paid._count,
-                amount: paid._sum.total || 0,
-            },
-            overdue: {
-                count: overdue._count,
-                amount: overdue._sum.total || 0,
-            },
-        };
-    }
+    return {
+        total: {
+            count: total._count,
+            amount: total._sum.total || 0,
+        },
+        pending: {
+            count: pending._count,
+            amount: pending._sum.total || 0,
+        },
+        paid: {
+            count: paid._count,
+            amount: paid._sum.total || 0,
+        },
+        overdue: {
+            count: overdue._count,
+            amount: overdue._sum.total || 0,
+        },
+    };
+}

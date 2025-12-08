@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma';
  */
 
 export type AuditAction = 'VIEW' | 'CREATE' | 'UPDATE' | 'DELETE' | 'EXPORT';
-export type AuditResource = 'PATIENT' | 'APPOINTMENT' | 'MEDICATION' | 'TREATMENT' | 'HEALTH_METRIC';
+export type AuditResource = 'PATIENT' | 'APPOINTMENT' | 'MEDICATION' | 'TREATMENT' | 'HEALTH_METRIC' | 'INVOICE' | 'PAYMENT' | 'EXPENSE' | 'HEALTH_DEVICE' | 'SERVICE_PRICE';
 
 interface AuditLogParams {
     userId: string;

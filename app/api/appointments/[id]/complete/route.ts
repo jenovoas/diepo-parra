@@ -10,8 +10,9 @@ import { createAuditLog, getIpAddress, getUserAgent } from '@/lib/utils/audit';
  */
 export async function POST(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
+    const params = await props.params;
     try {
         const session = await getServerSession(authOptions);
 
@@ -61,7 +62,7 @@ export async function POST(
             invoiceType: 'BOLETA',
             patientId: appointment.patientId,
             clientName: appointment.patient.fullName,
-            clientEmail: appointment.patient.user?.email,
+            clientEmail: appointment.patient.user?.email || undefined,
             items: [{
                 description: servicePrice.name,
                 quantity: 1,
@@ -69,7 +70,7 @@ export async function POST(
                 discount: 0,
                 servicePriceId: servicePrice.id,
             }],
-            notes: notes || `Cita del ${new Date(appointment.date).toLocaleDateString('es-CL')} - ${appointment.time}`,
+            notes: notes || `Cita del ${new Date(appointment.date).toLocaleDateString('es-CL')} - ${new Date(appointment.date).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}`,
         });
 
         // Mark appointment as completed

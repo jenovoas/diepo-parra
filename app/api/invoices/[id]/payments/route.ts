@@ -6,8 +6,9 @@ import { createAuditLog, getIpAddress, getUserAgent } from '@/lib/utils/audit';
 
 export async function POST(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
+    const params = await props.params;
     try {
         const session = await getServerSession(authOptions);
 
@@ -37,6 +38,13 @@ export async function POST(
             reference,
             notes
         );
+
+        if (!payment) {
+            return NextResponse.json(
+                { error: 'Failed to register payment' },
+                { status: 500 }
+            );
+        }
 
         // Audit log
         await createAuditLog({

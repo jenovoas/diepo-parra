@@ -22,8 +22,8 @@ export default async function DashboardPage({
 
         const where = query ? {
             OR: [
-                { fullName: { contains: query, mode: 'insensitive' } },
-                { user: { email: { contains: query, mode: 'insensitive' } } },
+                { fullName: { contains: query } },
+                { user: { email: { contains: query } } },
             ],
         } : {};
 

@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getInvoiceStats } from '@/lib/services/invoice-service';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
     try {
         const session = await getServerSession(authOptions);

@@ -60,15 +60,15 @@ export function Navbar() {
                 <Link href="/" className="font-accent text-lg md:text-xl lg:text-2xl font-bold text-primary flex items-center gap-2">
                     <Activity className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1.5} />
                     <ClientOnly>
-                      <span className="hidden sm:inline">DIEGO PARRA | Kinesiología</span>
-                      <span className="sm:hidden">D.P. | Kinesiología</span>
+                        <span className="hidden sm:inline">DIEGO PARRA | Kinesiología</span>
+                        <span className="sm:hidden">D.P. | Kinesiología</span>
                     </ClientOnly>                </Link>
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex items-center gap-4 lg:gap-8">
                     {navItems.map((item) => (
                         <Link
-                            key={item.name}
+                            key={item.href}
                             href={item.href}
                             className={cn(
                                 "text-sm font-medium text-text-main hover:text-primary transition-colors px-3 py-1.5 rounded-md hover:bg-primary/10",
@@ -160,7 +160,7 @@ export function Navbar() {
                 <div ref={linksRef} className="flex flex-col gap-6 items-center justify-center flex-1">
                     {navItems.map((item) => (
                         <Link
-                            key={item.name}
+                            key={item.href}
                             href={item.href}
                             className={cn(
                                 "text-3xl font-light font-heading text-text-main hover:text-primary transition-colors",

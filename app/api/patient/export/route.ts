@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         // Create audit log
         await createAuditLog({
             userId: session.user.id as string,
-            action: 'READ',
+            action: 'VIEW',
             resource: 'PATIENT',
             resourceId: patientId,
             patientId,

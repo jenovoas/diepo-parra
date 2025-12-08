@@ -69,15 +69,15 @@ export default async function ServicePage(props: Props) {
         const servicePrice = await prisma.servicePrice.findFirst({
             where: {
                 OR: [
-                    { name: { contains: t('title'), mode: 'insensitive' } },
-                    { name: { contains: service.id, mode: 'insensitive' } },
+                    { name: { contains: t('title') } },
+                    { name: { contains: service.id } },
                 ],
                 isActive: true,
             },
         });
 
         if (servicePrice) {
-            realPrice = servicePrice.finalPrice;
+            realPrice = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(servicePrice.finalPrice);
             servicePriceId = servicePrice.id;
         }
     } catch (error) {
