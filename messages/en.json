@@ -4,7 +4,11 @@
         "services": "Services",
         "about": "About",
         "contact": "Contact",
-        "emergency": "Emergency"
+        "contact": "Contact",
+        "emergency": "Emergency",
+        "login": "Login",
+        "myAccount": "My Account",
+        "logout": "Logout"
     },
     "Hero": {
         "title": "Integral Kinesiology",

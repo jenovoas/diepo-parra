@@ -118,13 +118,13 @@ export function Navbar() {
                                     className={cn(buttonVariants({ variant: "outline", size: "sm" }), "gap-2")}
                                 >
                                     <User className="w-4 h-4" />
-                                    Mi Cuenta
+                                    {t('myAccount')}
                                 </Link>
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => signOut()}
-                                    title="Cerrar Sesión"
+                                    title={t('logout')}
                                     className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
                                 >
                                     <LogOut className="w-4 h-4" />
@@ -136,7 +136,7 @@ export function Navbar() {
                                 className={cn(buttonVariants({ variant: "default", size: "sm" }), "gap-2 shadow-sm shadow-primary/20")}
                             >
                                 <User className="w-4 h-4" />
-                                Acceder
+                                {t('login')}
                             </Link>
                         )}
                     </div>
@@ -206,7 +206,7 @@ export function Navbar() {
                                     onClick={() => setIsOpen(false)}
                                 >
                                     <User className="w-5 h-5" />
-                                    Mi Cuenta
+                                    {t('myAccount')}
                                 </Link>
                                 <Button
                                     variant="ghost"
@@ -217,7 +217,7 @@ export function Navbar() {
                                     }}
                                 >
                                     <LogOut className="w-5 h-5" />
-                                    Cerrar Sesión
+                                    {t('logout')}
                                 </Button>
                             </>
                         ) : (
@@ -227,7 +227,7 @@ export function Navbar() {
                                 onClick={() => setIsOpen(false)}
                             >
                                 <User className="w-5 h-5" />
-                                Acceder / Registrarse
+                                {t('login')}
                             </Link>
                         )}
                     </div>

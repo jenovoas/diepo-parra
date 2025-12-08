@@ -4,7 +4,11 @@
         "services": "Servicios",
         "about": "Sobre Mí",
         "contact": "Contacto",
-        "emergency": "Emergencias"
+        "contact": "Contacto",
+        "emergency": "Emergencias",
+        "login": "Acceder",
+        "myAccount": "Mi Cuenta",
+        "logout": "Cerrar Sesión"
     },
     "Hero": {
         "title": "Kinesiología Integral",

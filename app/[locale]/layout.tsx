@@ -53,8 +53,9 @@ export default async function RootLayout({
             <AccessibilityProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
+                defaultTheme="light" // Cambiado de "system" a "light" para forzar el modo día al inicio
                 enableSystem
+                storageKey="theme-preference" // Añadida clave de almacenamiento para persistencia
                 disableTransitionOnChange
               >
                 <Navbar />

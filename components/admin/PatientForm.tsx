@@ -174,6 +174,7 @@ export function PatientForm({ patient, readOnly = false }: PatientFormProps) {
                                         defaultValue={patient?.user?.email || ""}
                                         required={!patient}
                                         disabled={!!patient}
+                                        autoComplete="off"
                                         className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-primary outline-none disabled:bg-gray-100 dark:disabled:bg-gray-600 disabled:text-gray-500 dark:disabled:text-gray-400"
                                     />
                                 </div>

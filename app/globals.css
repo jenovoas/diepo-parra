@@ -65,6 +65,7 @@ body {
   -webkit-text-fill-color: #2C3E50 !important;
   caret-color: #2C3E50 !important;
   color-scheme: light !important;
+  background-image: none !important;
 }
 
 /* DARK MODE AUTOFILL - Explicit overrides */
@@ -76,6 +77,7 @@ body {
   -webkit-text-fill-color: #FFFFFF !important;
   caret-color: #FFFFFF !important;
   color-scheme: dark !important;
+  background-image: none !important;
 }
 
 :root {
