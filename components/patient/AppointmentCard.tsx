@@ -55,11 +55,11 @@ export function AppointmentCard({ appointment, onCancel }: AppointmentCardProps)
     return (
         <div className={cn(
             "p-6 rounded-xl shadow-sm border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all",
-            isCancelled ? "bg-gray-50 border-gray-100 opacity-70" : "bg-white border-gray-100 hover:shadow-md"
+            isCancelled ? "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-700 opacity-70" : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:shadow-md"
         )}>
             <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                    <h3 className={cn("font-bold text-lg", isCancelled ? "text-gray-500 line-through" : "text-primary")}>
+                    <h3 className={cn("font-bold text-lg", isCancelled ? "text-gray-500 dark:text-gray-400 line-through" : "text-primary")}>
                         {appointment.serviceType}
                     </h3>
                     <span className={cn(
@@ -70,7 +70,7 @@ export function AppointmentCard({ appointment, onCancel }: AppointmentCardProps)
                     </span>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-text-sec">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm text-text-sec dark:text-gray-400">
                     <p className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-gray-400" />
                         <span className="capitalize">{format(new Date(appointment.date), "EEEE d 'de' MMMM", { locale: es })}</span>
@@ -81,7 +81,7 @@ export function AppointmentCard({ appointment, onCancel }: AppointmentCardProps)
                     </p>
                     {appointment.doctor && (
                         <p className="flex items-center gap-2">
-                            <span className="w-4 h-4 rounded-full bg-gray-200 overflow-hidden relative">
+                            <span className="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden relative">
                                 {appointment.doctor.image && <img src={appointment.doctor.image} alt="" className="object-cover" />}
                             </span>
                             <span>{appointment.doctor.name}</span>
@@ -95,18 +95,18 @@ export function AppointmentCard({ appointment, onCancel }: AppointmentCardProps)
                 <div className="flex gap-2 w-full md:w-auto">
                     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600 w-full md:w-auto">
+                            <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 w-full md:w-auto">
                                 <XCircle className="w-4 h-4 mr-2" />
                                 Cancelar
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-sm">
                             <div className="text-center p-4">
-                                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                                <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
                                     <AlertCircle className="w-6 h-6 text-red-600" />
                                 </div>
-                                <h3 className="font-bold text-lg mb-2">¿Cancelar Cita?</h3>
-                                <p className="text-sm text-gray-500 mb-6">
+                                <h3 className="font-bold text-lg mb-2 dark:text-white">¿Cancelar Cita?</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
                                     ¿Estás seguro que deseas cancelar tu cita de {appointment.serviceType}? Esta acción no se puede deshacer inmediatamente.
                                 </p>
                                 <div className="flex gap-3 justify-center">

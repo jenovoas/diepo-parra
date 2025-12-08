@@ -63,7 +63,7 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                     <h1 className="text-3xl font-bold font-accent text-primary">
                         Hola, {session.user?.name || "Paciente"}
                     </h1>
-                    <p className="text-text-sec">Bienvenido a tu portal de salud.</p>
+                    <p className="text-text-sec dark:text-gray-400">Bienvenido a tu portal de salud.</p>
                 </div>
                 <div className="flex gap-4">
                     <Link
@@ -86,7 +86,7 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
 
                 {/* Upcoming Appointments */}
                 <div className="md:col-span-2 space-y-6">
-                    <h2 className="text-xl font-bold text-text-main flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-text-main dark:text-white flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-primary" /> Próximas Citas
                     </h2>
 
@@ -101,8 +101,8 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-white p-8 rounded-xl border border-dashed border-gray-200 text-center py-12">
-                            <p className="text-text-sec mb-4">No tienes citas agendadas próximamente.</p>
+                        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl border border-dashed border-gray-200 dark:border-gray-700 text-center py-12">
+                            <p className="text-text-sec dark:text-gray-400 mb-4">No tienes citas agendadas próximamente.</p>
 
                             <BookingModal serviceId="general" serviceName="Consulta General">
                                 <Button variant="ghost" className="text-primary hover:bg-primary/5">
@@ -117,7 +117,7 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                 <div className="space-y-6">
                     <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl border border-primary/10">
                         <h3 className="font-bold text-lg text-primary mb-2">Reserva Rápida</h3>
-                        <p className="text-sm text-text-sec mb-4">
+                        <p className="text-sm text-text-sec dark:text-gray-400 mb-4">
                             Agenda tu próxima sesión de kinesiología o acupuntura en pocos pasos.
                         </p>
 
@@ -128,9 +128,9 @@ export function PatientDashboard({ session, patient }: PatientDashboardProps) {
                         </BookingModal>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-gray-100">
-                        <h3 className="font-bold text-lg text-gray-800 mb-2">¿Necesitas Ayuda?</h3>
-                        <p className="text-sm text-text-sec mb-4">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700">
+                        <h3 className="font-bold text-lg text-gray-800 dark:text-white mb-2">¿Necesitas Ayuda?</h3>
+                        <p className="text-sm text-text-sec dark:text-gray-400 mb-4">
                             Contáctanos directamente si tienes dudas sobre tu tratamiento.
                         </p>
                         <Link
