@@ -15,7 +15,7 @@ export async function GET(request: Request) {
                 where: {
                     OR: [
                         { id: serviceId },
-                        { name: { contains: serviceId, mode: 'insensitive' } },
+                        { name: { contains: serviceId } },
                     ],
                     isActive: true,
                 },
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
                 name: servicePrice.name,
                 description: servicePrice.description,
                 basePrice: servicePrice.basePrice,
-                tax: servicePrice.tax,
+                tax: servicePrice.taxAmount,
                 finalPrice: servicePrice.finalPrice,
             });
         }
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
             name: sp.name,
             description: sp.description,
             basePrice: sp.basePrice,
-            tax: sp.tax,
+            tax: sp.taxAmount,
             finalPrice: sp.finalPrice,
         })));
 

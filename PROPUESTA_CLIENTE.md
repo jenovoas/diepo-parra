@@ -100,7 +100,9 @@ La plataforma está lista para crecer con su consulta. Proponemos las siguientes
 
 Para mostrar el proyecto a clientes finales de forma eficiente sin depender de capturas de pantalla, recomendamos **desplegar una versión de prueba en vivo (Staging/Demo)**.
 
-**Recomendación:** Utilizar **Vercel** para generar un enlace web seguro y accesible instantáneamente (ej: `diego-parra-demo.vercel.app`).
+**Recomendación:** Utilizar **Vercel** para generar un enlace web seguro y accesible instantáneamente.
+    
+**👉 ENLACE DEMO ACTUAL:** [https://diepo-parra-5ywmlhxpu-jenovoas-projects.vercel.app](https://diepo-parra-5ywmlhxpu-jenovoas-projects.vercel.app)
 - **Ventajas:**
   - El cliente puede navegar e interactuar con el sitio "Liquid Zen" real desde su celular o computador.
   - No requiere enviar archivos pesados por correo.

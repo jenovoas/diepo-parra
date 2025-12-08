@@ -121,21 +121,24 @@ export async function hardDeletePatient(
             medications: true,
             treatments: true,
             healthMetrics: true,
-            healthDeviceConnections: true,
+            deviceConnections: true,
         },
     });
+
+    // Cast to any to avoid TS errors with includes
+    const patientData = patient as any;
 
     if (!patient) {
         throw new Error('Patient not found');
     }
 
     // Check if soft deleted
-    if (!patient.deletedAt) {
+    if (!patientData.deletedAt) {
         throw new Error('Patient must be soft deleted first');
     }
 
     // Check retention period (15 years for medical records in Chile)
-    const deletedDate = new Date(patient.deletedAt);
+    const deletedDate = new Date(patientData.deletedAt);
     const retentionYears = 15;
     const retentionDate = new Date(deletedDate);
     retentionDate.setFullYear(retentionDate.getFullYear() + retentionYears);
@@ -157,10 +160,12 @@ export async function hardDeletePatient(
             hardDelete: true,
             reason: options.reason,
             recordCount: {
-                appointments: patient.appointments.length,
-                medications: patient.medications.length,
-                treatments: patient.treatments.length,
-                healthMetrics: patient.healthMetrics.length,
+                recordCount: {
+                    appointments: patientData.appointments.length,
+                    medications: patientData.medications.length,
+                    treatments: patientData.treatments.length,
+                    healthMetrics: patientData.healthMetrics.length,
+                },
             },
         },
         ipAddress: options.ipAddress,

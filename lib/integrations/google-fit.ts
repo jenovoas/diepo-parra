@@ -100,6 +100,10 @@ export class GoogleFitClient {
 
         const { credentials } = await this.oauth2Client.refreshAccessToken();
 
+        if (!credentials.access_token) {
+            throw new Error('Failed to refresh Google Fit access token');
+        }
+
         // Update tokens in database
         await prisma.healthDeviceConnection.update({
             where: { id: connection.id },
@@ -146,11 +150,11 @@ export class GoogleFitClient {
                 aggregateBy: [{
                     dataTypeName: 'com.google.step_count.delta',
                 }],
-                bucketByTime: { durationMillis: 86400000 }, // 1 day
-                startTimeMillis: startDate.getTime(),
-                endTimeMillis: endDate.getTime(),
+                bucketByTime: { durationMillis: "86400000" }, // 1 day
+                startTimeMillis: startDate.getTime().toString(),
+                endTimeMillis: endDate.getTime().toString(),
             },
-        });
+        } as any);
 
         return this.parseStepsData(response.data);
     }
@@ -170,11 +174,11 @@ export class GoogleFitClient {
                 aggregateBy: [{
                     dataTypeName: 'com.google.heart_rate.bpm',
                 }],
-                bucketByTime: { durationMillis: 86400000 },
-                startTimeMillis: startDate.getTime(),
-                endTimeMillis: endDate.getTime(),
+                bucketByTime: { durationMillis: "86400000" },
+                startTimeMillis: startDate.getTime().toString(),
+                endTimeMillis: endDate.getTime().toString(),
             },
-        });
+        } as any);
 
         return this.parseHeartRateData(response.data);
     }
@@ -194,9 +198,9 @@ export class GoogleFitClient {
                 aggregateBy: [{
                     dataTypeName: 'com.google.sleep.segment',
                 }],
-                bucketByTime: { durationMillis: 86400000 },
-                startTimeMillis: startDate.getTime(),
-                endTimeMillis: endDate.getTime(),
+                bucketByTime: { durationMillis: "86400000" },
+                startTimeMillis: startDate.getTime().toString(),
+                endTimeMillis: endDate.getTime().toString(),
             },
         });
 

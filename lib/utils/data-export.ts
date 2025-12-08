@@ -10,7 +10,6 @@ import { decrypt } from './encryption';
  */
 
 export interface PatientExportData {
-    patient: any;
     includeAppointments?: boolean;
     includeMedications?: boolean;
     includeTreatments?: boolean;
@@ -29,7 +28,7 @@ export async function generatePatientPDF(patientId: string, options: PatientExpo
     } = options;
 
     // Fetch complete patient data
-    const patient = await prisma.patient.findUnique({
+    const patient = (await prisma.patient.findUnique({
         where: { id: patientId },
         include: {
             user: true,
@@ -38,7 +37,7 @@ export async function generatePatientPDF(patientId: string, options: PatientExpo
             treatments: includeTreatments,
             healthMetrics: includeMetrics,
         },
-    });
+    })) as any;
 
     if (!patient) {
         throw new Error('Patient not found');
@@ -310,7 +309,7 @@ function checkPageBreak(doc: jsPDF, yPosition: number, requiredSpace: number) {
  * Generate JSON export of patient data
  */
 export async function generatePatientJSON(patientId: string) {
-    const patient = await prisma.patient.findUnique({
+    const patient = (await prisma.patient.findUnique({
         where: { id: patientId },
         include: {
             user: {
@@ -323,7 +322,7 @@ export async function generatePatientJSON(patientId: string) {
             medications: true,
             treatments: true,
             healthMetrics: true,
-            healthDeviceConnections: {
+            deviceConnections: {
                 select: {
                     provider: true,
                     lastSync: true,
@@ -331,7 +330,7 @@ export async function generatePatientJSON(patientId: string) {
                 },
             },
         },
-    });
+    })) as any;
 
     if (!patient) {
         throw new Error('Patient not found');
